@@ -14,5 +14,8 @@
   <project remote="oe"      revision="9b3b907f30b0d5b92d58c7e68289184fda733d3e" name="meta-openembedded" path="source/meta-openembedded"/>
   <project remote="i2se"    revision="thud"                                     name="meta-in-tech-sc"   path="source/meta-in-tech-sc"/>
   <project remote="rauc"    revision="17599be65f6a5eabe6e4a246767c06dc4507f21a" name="meta-rauc"         path="source/meta-rauc"/>
+  <project remote="i2se"    revision="thud"                                     name="in-tech-sc-bsp"    path="in-tech-sc-bsp">
+    <linkfile dest="build/conf" src="conf"/>
+  </project>
 
 </manifest>
