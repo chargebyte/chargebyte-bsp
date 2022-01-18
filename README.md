@@ -12,18 +12,20 @@ For problems and inquiries: https://tickets.in-tech-smartcharging.com/servicedes
 3.1 [System Requirements](#SystemRequirements)  
 3.2 [Setting up the Yocto build environment](#Setting)  
 3.3 [Adding or removing layers](#addorremove)  
-3.4 [Building an Image](#build)
+3.4 [Building an Image](#build)  
+4. [Appendix](#appendix)  
+A.1 [How to change kernel configurations](#kernel) 
 
 
 ## Introduction <a name="introduction"></a>
 
-This document helps you to get started with creating a Linux image based on board support packages (BSP) of Tarragon & EVAcharge SE; hardware platforms offered by in-tech smart charging GmbH. It defines what the layers included in this Yocto Project are, and how you can use them to create a basic Linux distribution, which you can then extend by adding further packages specific to your application.
+This document helps you to get started with creating a Linux image based on board support packages (BSP) of Tarragon & EVAcharge SE - the hardware platforms offered by in-tech smart charging GmbH. It defines what the layers included in this Yocto Project are, and how you can use them to create a basic Linux distribution, which you can then extend by adding further packages specific to your application.
 
-If you are new to Yocto, it is recommended to read the [Yocto Overview and Concepts Manual](https://docs.yoctoproject.org/overview-manual/index.html). To get a quick introduction about Yocto, this [Software Overview](https://www.yoctoproject.org/software-overview) might be helpful. For further documentations about the Yocto Project, including information about dealing with BSP layers and working with the Yocto Project's build system **BitBake**, check the [Yocto Project Documentation](https://docs.yoctoproject.org/).
+If you are new to Yocto, it is recommended to read the [Yocto Overview and Concepts Manual](https://docs.yoctoproject.org/overview-manual/index.html). To get a quick introduction to Yocto, this [Software Overview](https://www.yoctoproject.org/software-overview) might be helpful. For further documentation on the Yocto Project, including information about dealing with BSP layers and working with the Yocto Project's build system **BitBake**, check the [Yocto Project Documentation](https://docs.yoctoproject.org/).
 
 ## Background <a name="background"></a>
 ### Layers <a name="layers"></a>
-As the Yocto Project is based on the concepts of [layers](https://docs.yoctoproject.org/dev-manual/common-tasks.html#understanding-and-creating-layers), the following table lists all the layers used to create a basic distribution based on in-tech smart charging’s charge control platforms Tarragon and EVAcharge SE.
+As the Yocto Project is based on the concept of [layers](https://docs.yoctoproject.org/dev-manual/common-tasks.html#understanding-and-creating-layers), the following table lists all the layers used to create a basic distribution based on in-tech smart charging’s charge control platforms Tarragon and EVAcharge SE.
 
 | Layer | Description | Repository |
 |--|--|--|
@@ -34,10 +36,10 @@ As the Yocto Project is based on the concepts of [layers](https://docs.yoctoproj
 | meta-rauc| Layer controlling and performing secure software updates for embedded Linux | https://github.com/I2SE/rauc |
 | poky | Build tool and metadata included in a reference distribution | https://github.com/I2SE/poky |
 
-This layering approach increases flexibility to expand your project. You can add layers, which in turn would add packages essential for the distribution you want to build. Layers are available usually as repositories. Information on how to include or remove layers will be given in [Section 3.3](#addorremove). Note that no charging capabilities will be included in the Linux distribution created by this setup.
+This layering approach increases flexibility to expand your project. You can add layers, which in turn would add packages essential for the distribution you want to build. Layers are usually available as repositories. Information on how to include or remove layers will be given in [Section 3.3](#addorremove). Note that no charging capabilities will be included in the Linux distribution created by this setup.
 
 ### "Wrapper" Repository <a name="wrapper"></a>
-This "wrapper" repository has been created to facilitate downloading the above-mentioned layers/repositories on your local machine. It contains a manifest file called `default.xml` that contains information about the repositories representing the layers needed to build a distribution, and which branches to be checked out from these repositories. The process of extracting information out of the manifest file and checking out the branches of the mentioned repositories is done by using `repo` commands. Installation and usage of the `repo` utility will be explained in [Section 3.2](#Setting). The manifest file for this repository looks like the following:
+This "wrapper" repository has been created to facilitate downloading the above-mentioned layers/repositories on your local machine. It contains a manifest file called `default.xml` that holds information about the repositories representing the layers needed to build a distribution, and which branches to be checked out from these repositories. The process of extracting information from the manifest file and checking out the branches of the mentioned repositories is done by using `repo` commands. Installation and usage of the `repo` utility will be explained in [Section 3.2](#Setting). The manifest file for this repository looks like this:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -64,13 +66,13 @@ This "wrapper" repository has been created to facilitate downloading the above-m
 </manifest>
 ```
 
-The attributes `revision` and `path` represent the source branch and the destination where the branch content will be placed on the local machine, respectively. You can set the `revision` to be either a branch name, by which you can continuously receive branch updates, or a particular commit to the repository. The tag `linkfile` links two folders together. It has two attributes; one is `src` which is a folder in the repository, and the other is `dest` representing the destination folder in the local machine, which will always have the content of the source folder i.e., mirror it.
+The attributes `revision` and `path` represent the source branch and the destination where the branch´s content will be placed on the local machine, respectively. You can set the `revision` to be either a branch name, by which you can continuously receive branch updates, or a particular commit in the repository. The tag `linkfile` links two folders together. It has two attributes; one is `src` which is a folder in the repository, and the other is `dest` representing the destination folder on the local machine, which will always have the content of the source folder i.e., mirror it.
 
-Apart from the manifest file, the repository has also a configuration folder. This folder contains a `local.conf` file, that contains some variables and machine configurations you can alter to affect the resulting distribution, and a `bblayers.conf` file that gives information about which layers will be included for building. Adding or removing layers can be done through this file, provided that the added layer, e.g., the cloned repository, is found on the local machine in the path described in this file. 
+Apart from the manifest file, the repository also has a configuration folder. This folder contains a `local.conf` file which contains variables and machine configurations you can alter to affect the resulting distribution and a `bblayers.conf` file which gives information about the layers included for building. Adding or removing layers can be done through this file, provided that the added layer, e.g., the cloned repository, is found on the local machine in the path described in this file. 
 
 ## Build with Yocto <a name="building"></a>
 ### System Requirements <a name="SystemRequirements"></a>
-Some packages are required by the build host to be able to cover all build scenarios using the Yocto Project. In this section of the [Yocto Reference Manual](https://docs.yoctoproject.org/ref-manual/system-requirements.html#required-packages-for-the-build-host) you can find some helpful instructions based on the Linux distribution you are using. If you are using hosts other than Linux, this section of the [Yocto Project Development Tasks Manual](https://docs.yoctoproject.org/dev-manual/start.html#preparing-the-build-host) can help you setting up your host system for using Yocto. 
+Some packages are required by the build host to be able to cover all build scenarios using the Yocto Project. In this section of the [Yocto Reference Manual](https://docs.yoctoproject.org/ref-manual/system-requirements.html#required-packages-for-the-build-host) you can find some helpful instructions based on the Linux distribution you are using. If you are using a host other than Linux, this section of the [Yocto Project Development Tasks Manual](https://docs.yoctoproject.org/dev-manual/start.html#preparing-the-build-host) can help you setting up your host system for using Yocto. 
 
 ### Setting up the Yocto build environment <a name="Setting"></a>
 To be able to build an image with Yocto, the following setup should be followed: 
@@ -114,7 +116,7 @@ Adding a layer can be done either:
 
 or **Automatically**
 1. Edit the manifest file `in-tech-sc-bsp/default.xml`, so that it contains information about the source of the new layer
-2. Issue the command `repo sync`. Note that all other layers will be synced, so any unsaved changes to your layers will be lost.
+2. Issue the command `repo sync`. Note that all other layers will be synced as well, so any unsaved changes to your layers will be lost.
 3. Edit the `yocto/build/conf/bblayers.conf` file to include the new layer with the right path.
 
 You can then execute the command `bitbake-layers show-layers` to make sure that the new layer is now included.
@@ -122,7 +124,7 @@ You can then execute the command `bitbake-layers show-layers` to make sure that 
 To remove a layer, you can simply alter the `bblayers.conf` file by removing the layer path to make sure that the build system does not consider this layer while generating an image.
 
 ### Building an image <a name="build"></a>
-To rightly set configuration related to the hardware platforms Tarragon and EVAcharge SE, the following table gives you insights about the images you can build:
+To correctly set configurations related to the hardware platforms Tarragon and EVAcharge SE, the following table gives you insight about the images you can build:
 
 | **`MACHINE`** | **`PROJECT`** | **`CUSTOMER`** | Resulting image |
 |--|--|--|--|
@@ -145,4 +147,33 @@ export BB_ENV_EXTRAWHITE="PROJECT MACHINE"
 
 The resulting image will be found in `yocto/build/tmp/deploy/image/<machine>`.
 
+## Appendix <a name="appendix"></a>
+### How to change kernel configurations <a name="kernel"></a>
+
+It may occur that you want to adapt the system's kernel configuration to be suitable for your special requirements, e.g., adding drivers or packages like Docker. Here are the steps you need to follow to generate a Linux image based on your desired kernel configuration: 
+
+1. Execute the command `bitbake linux-imx -c menuconfig` to open a tool that permits you to change the kernel configuration. 
+2. If you know the configuration name by the convention `CONFIG_*` only, you can search for it by typing "/" and putting its name after. You will be told which other configurations you need to set in order to be able to view this configuration and set it, as sometimes they may be hidden. Type "z" to find the hidden configurations. Press exit and choose "yes" to save the configurations temporarily.
+3. You will need to perform the following commands in your build directory to save the configuration permanently and move them to your recipe folder. 
+```bash
+bitbake -c savedefconfig linux-imx
+
+cp tmp/work/tarragon-poky-linux-gnueabi/linux-imx/4.9.123-r0/build/defconfig  ../source/meta-in-tech-sc/recipes-kernel/linux/linux-imx/imx/
+```
+4. In the bbappend file found in meta-in-tech-sc/recipes-kernel/linux/linux-imx_%.bbappend, change the SRC_URI to be the following:
+```bash
+SRC_URI = "\
+            git://github.com/I2SE/linux.git;protocol=https;branch=${SRCBRANCH} \
+            file://defconfig \
+          "
+```
+5. Perform the following commands to remove the output files and shared state cache for the linux kernel, and then build a new image with the new kernel configuration.
+```bash
+bitbake -c cleansstate linux-imx
+
+bitbake core-image-minimal
+```
+6. You may check the .config file located in tmp/work/tarragon-poky-linux-gnueabi/linux-imx/4.9.123-r0/build/ to make sure that your changes were added to the kernel configuration.
+
 [^1]: to be able to build a developer image, check the respective documentation in `local.conf` 
+
