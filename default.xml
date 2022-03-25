@@ -5,17 +5,17 @@
   <!-- remote repository definitions -->
   <remote fetch="https://git.yoctoproject.org/git" name="yocto"/>
   <remote fetch="https://github.com/openembedded" name="oe"/>
-  <remote fetch="https://github.com/I2SE" name="i2se"/>
+  <remote fetch="https://github.com/I2SE" name="sc"/>
   <remote fetch="https://github.com/I2SE" name="rauc"/>
 
   <!-- project definitions -->
-  <project remote="i2se"    revision="582cfbc66925a3f7879bd2289835352b342d8985" name="poky"                   path="source"/>
-  <project remote="yocto"   revision="b73854c078b0a174613135b60da3377a1055f477" name="meta-freescale"         path="source/meta-freescale"/>
-  <project remote="oe"      revision="9b3b907f30b0d5b92d58c7e68289184fda733d3e" name="meta-openembedded"      path="source/meta-openembedded"/>
-  <project remote="i2se"    revision="thud"                                     name="meta-in-tech-sc"        path="source/meta-in-tech-sc"/>
-  <project remote="i2se"    revision="thud"                                     name="meta-in-tech-sc-distro" path="source/meta-in-tech-sc-distro"/>
-  <project remote="rauc"    revision="17599be65f6a5eabe6e4a246767c06dc4507f21a" name="meta-rauc"              path="source/meta-rauc"/>
-  <project remote="i2se"    revision="thud"                                     name="in-tech-sc-bsp"         path="in-tech-sc-bsp">
+  <project remote="yocto"   revision="master"                                    name="poky"                   path="source"/>
+  <project remote="yocto"   revision="master"                                    name="meta-freescale"         path="source/meta-freescale"/>
+  <project remote="oe"      revision="master"                                    name="meta-openembedded"      path="source/meta-openembedded"/>
+  <project remote="sc"      revision="thud"                                      name="meta-in-tech-sc"        path="source/meta-in-tech-sc"/>
+  <project remote="sc"      revision="thud"                                      name="meta-in-tech-sc-distro" path="source/meta-in-tech-sc-distro"/>
+  <project remote="rauc"    revision="17599be65f6a5eabe6e4a246767c06dc4507f21a"  name="meta-rauc"              path="source/meta-rauc"/>
+  <project remote="sc"      revision="thud"                                      name="in-tech-sc-bsp"         path="in-tech-sc-bsp">
     <linkfile dest="build/conf" src="conf"/>
   </project>
 
