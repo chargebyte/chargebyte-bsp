@@ -139,7 +139,7 @@ For building an image, you would need to do the following:
 ```bash
 export MACHINE=tarragon
 export PROJECT=bsp
-export BB_ENV_EXTRAWHITE="PROJECT MACHINE"
+export BB_ENV_PASSTHROUGH_ADDITIONS="PROJECT MACHINE"
 ```
   - Edit `yocto/build/conf/local.conf` directly. e.g., `MACHINE=...`.
 2. Execute `source yocto/source/oe-init-build-env build` which initializes the build environment and changes the directory to `yocto/build`.
