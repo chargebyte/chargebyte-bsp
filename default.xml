@@ -9,7 +9,7 @@
   <remote fetch="https://github.com/rauc" name="rauc"/>
 
   <!-- project definitions -->
-  <project remote="yocto"   revision="master"                                    name="poky"                   path="source"/>
+  <project remote="yocto"   revision="kirkstone"                                 name="poky"                   path="source"/>
   <project remote="yocto"   revision="master"                                    name="meta-freescale"         path="source/meta-freescale"/>
   <project remote="oe"      revision="master"                                    name="meta-openembedded"      path="source/meta-openembedded"/>
   <project remote="sc"      revision="kirkstone-next"                            name="meta-in-tech-sc"        path="source/meta-in-tech-sc"/>
