@@ -44,22 +44,22 @@ This "wrapper" repository has been created to facilitate downloading the above-m
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
-  <default sync-j="4" revision="thud"/>
+  <default sync-j="4" revision="master"/>
 
   <!-- remote repository definitions -->
   <remote fetch="https://git.yoctoproject.org/git" name="yocto"/> <!-- This represents a link to a repository, and it will have a name for further usage -->
   <remote fetch="https://github.com/openembedded" name="oe"/>
-  <remote fetch="https://github.com/I2SE" name="i2se"/>
-  <remote fetch="https://github.com/I2SE" name="rauc"/>
+  <remote fetch="https://github.com/I2SE" name="sc"/>
+  <remote fetch="https://github.com/rauc" name="rauc"/>
 
   <!-- project definitions -->
-  <project remote="i2se"    revision="582cfbc66925a3f7879bd2289835352b342d8985" name="poky"                   path="source"/>
-  <project remote="yocto"   revision="b73854c078b0a174613135b60da3377a1055f477" name="meta-freescale"         path="source/meta-freescale"/>
-  <project remote="oe"      revision="9b3b907f30b0d5b92d58c7e68289184fda733d3e" name="meta-openembedded"      path="source/meta-openembedded"/>
-  <project remote="i2se"    revision="thud"                                     name="meta-in-tech-sc"        path="source/meta-in-tech-sc"/>
-  <project remote="i2se"    revision="thud"                                     name="meta-in-tech-sc-distro" path="source/meta-in-tech-sc-distro"/>
-  <project remote="rauc"    revision="17599be65f6a5eabe6e4a246767c06dc4507f21a" name="meta-rauc"              path="source/meta-rauc"/>
-  <project remote="i2se"    revision="thud"                                     name="in-tech-sc-bsp"         path="in-tech-sc-bsp">
+  <project remote="yocto"   revision="kirkstone"                                 name="poky"                   path="source"/>
+  <project remote="yocto"   revision="master"                                    name="meta-freescale"         path="source/meta-freescale"/>
+  <project remote="oe"      revision="master"                                    name="meta-openembedded"      path="source/meta-openembedded"/>
+  <project remote="sc"      revision="kirkstone-next"                            name="meta-in-tech-sc"        path="source/meta-in-tech-sc"/>
+  <project remote="sc"      revision="kirkstone-next"                            name="meta-in-tech-sc-distro" path="source/meta-in-tech-sc-distro"/>
+  <project remote="rauc"    revision="master"                                    name="meta-rauc"              path="source/meta-rauc"/>
+  <project remote="sc"      revision="kirkstone-next"                            name="in-tech-sc-bsp"         path="in-tech-sc-bsp">
     <linkfile dest="build/conf" src="conf"/>
   </project>
 
@@ -96,7 +96,7 @@ echo 'export PATH="$PATH":~/bin' >> ~/.bashrc
 ```bash
 mkdir yocto
 cd yocto
-repo init -u https://github.com/I2SE/in-tech-sc-bsp -b thud
+repo init -u https://github.com/I2SE/in-tech-sc-bsp -b kirkstone-next
 repo sync
 ```
 
