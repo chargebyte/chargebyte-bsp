@@ -54,8 +54,8 @@ This "wrapper" repository has been created to facilitate downloading the above-m
 
   <!-- project definitions -->
   <project remote="yocto"   revision="kirkstone"                                 name="poky"                   path="source"/>
-  <project remote="yocto"   revision="master"                                    name="meta-freescale"         path="source/meta-freescale"/>
-  <project remote="oe"      revision="master"                                    name="meta-openembedded"      path="source/meta-openembedded"/>
+  <project remote="yocto"   revision="kirkstone"                                 name="meta-freescale"         path="source/meta-freescale"/>
+  <project remote="oe"      revision="kirkstone"                                 name="meta-openembedded"      path="source/meta-openembedded"/>
   <project remote="sc"      revision="kirkstone-next"                            name="meta-in-tech-sc"        path="source/meta-in-tech-sc"/>
   <project remote="sc"      revision="kirkstone-next"                            name="meta-in-tech-sc-distro" path="source/meta-in-tech-sc-distro"/>
   <project remote="rauc"    revision="master"                                    name="meta-rauc"              path="source/meta-rauc"/>
