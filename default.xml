@@ -5,17 +5,17 @@
   <!-- remote repository definitions -->
   <remote fetch="https://git.yoctoproject.org/git" name="yocto"/>
   <remote fetch="https://github.com/openembedded" name="oe"/>
-  <remote fetch="https://github.com/I2SE" name="sc"/>
+  <remote fetch="https://github.com/chargebyte" name="chargebyte"/>
   <remote fetch="https://github.com/rauc" name="rauc"/>
 
   <!-- project definitions -->
-  <project remote="yocto"   revision="kirkstone"                                 name="poky"                   path="source"/>
-  <project remote="yocto"   revision="kirkstone"                                 name="meta-freescale"         path="source/meta-freescale"/>
-  <project remote="oe"      revision="kirkstone"                                 name="meta-openembedded"      path="source/meta-openembedded"/>
-  <project remote="sc"      revision="kirkstone-next"                            name="meta-in-tech-sc"        path="source/meta-in-tech-sc"/>
-  <project remote="sc"      revision="kirkstone-next"                            name="meta-in-tech-sc-distro" path="source/meta-in-tech-sc-distro"/>
-  <project remote="rauc"    revision="master"                                    name="meta-rauc"              path="source/meta-rauc"/>
-  <project remote="sc"      revision="kirkstone-next"                            name="in-tech-sc-bsp"         path="in-tech-sc-bsp">
+  <project remote="yocto"        revision="kirkstone"                                name="poky"                   path="source"/>
+  <project remote="yocto"        revision="kirkstone"                                name="meta-freescale"         path="source/meta-freescale"/>
+  <project remote="oe"           revision="kirkstone"                                name="meta-openembedded"      path="source/meta-openembedded"/>
+  <project remote="chargebyte"   revision="kirkstone-next"                           name="meta-chargebyte"        path="source/meta-chargebyte"/>
+  <project remote="chargebyte"   revision="kirkstone-next"                           name="meta-chargebyte-distro" path="source/meta-chargebyte-distro"/>
+  <project remote="rauc"         revision="master"                                   name="meta-rauc"              path="source/meta-rauc"/>
+  <project remote="chargebyte"   revision="kirkstone-next"                           name="chargebyte-bsp"         path="chargebyte-bsp">
     <linkfile dest="build/conf" src="conf"/>
   </project>
 
