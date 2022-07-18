@@ -4,17 +4,18 @@ This is a wrapper repository for chargebyte GmbH's Yocto BSP and distribution op
 For problems and inquiries: https://tickets.in-tech-smartcharging.com/servicedesk
 
 ## Table of Contents
-1. [Introduction](#introduction)
-2. [Background](#background)
-2.1 [Layers](#layers)
-2.2 ["Wrapper" Repository](#wrapper)
-3. [Build with Yocto](#building)
-3.1 [System Requirements](#SystemRequirements)
-3.2 [Setting up the Yocto build environment](#Setting)
-3.3 [Adding or removing layers](#addorremove)
-3.4 [Building an Image](#build)
-4. [Appendix](#appendix)
-A.1 [How to change kernel configurations](#kernel)
+
+1. [Introduction](#introduction)  
+2. [Background](#background)  
+2.1 [Layers](#layers)  
+2.2 ["Wrapper" Repository](#wrapper)  
+3. [Build with Yocto](#building)  
+3.1 [System Requirements](#SystemRequirements)  
+3.2 [Setting up the Yocto build environment](#Setting)  
+3.3 [Adding or removing layers](#addorremove)  
+3.4 [Building an Image](#build)  
+4. [Appendix](#appendix)  
+A.1 [How to change kernel configurations](#kernel)  
 
 
 ## Introduction <a name="introduction"></a>
@@ -24,7 +25,9 @@ This document helps you to get started with creating a Linux image based on boar
 If you are new to Yocto, it is recommended to read the [Yocto Overview and Concepts Manual](https://docs.yoctoproject.org/overview-manual/index.html). To get a quick introduction to Yocto, this [Software Overview](https://www.yoctoproject.org/software-overview) might be helpful. For further documentation on the Yocto Project, including information about dealing with BSP layers and working with the Yocto Project's build system **BitBake**, check the [Yocto Project Documentation](https://docs.yoctoproject.org/).
 
 ## Background <a name="background"></a>
+
 ### Layers <a name="layers"></a>
+
 As the Yocto Project is based on the concept of [layers](https://docs.yoctoproject.org/dev-manual/common-tasks.html#understanding-and-creating-layers), the following table lists all the layers used to create a basic distribution based on chargebyte’s charge control platforms Tarragon and EVAcharge SE.
 
 | Layer | Description | Repository |
@@ -39,6 +42,7 @@ As the Yocto Project is based on the concept of [layers](https://docs.yoctoproje
 This layering approach increases flexibility to expand your project. You can add layers, which in turn would add packages essential for the distribution you want to build. Layers are usually available as repositories. Information on how to include or remove layers will be given in [Section 3.3](#addorremove). Note that no charging capabilities will be included in the Linux distribution created by this setup.
 
 ### "Wrapper" Repository <a name="wrapper"></a>
+
 This "wrapper" repository has been created to facilitate downloading the above-mentioned layers/repositories on your local machine. It contains a manifest file called `default.xml` that holds information about the repositories representing the layers needed to build a distribution, and which branches to be checked out from these repositories. The process of extracting information from the manifest file and checking out the branches of the mentioned repositories is done by using `repo` commands. Installation and usage of the `repo` utility will be explained in [Section 3.2](#Setting). The manifest file for this repository looks like this:
 
 ```xml
@@ -71,10 +75,13 @@ The attributes `revision` and `path` represent the source branch and the destina
 Apart from the manifest file, the repository also has a configuration folder. This folder contains a `local.conf` file which contains variables and machine configurations you can alter to affect the resulting distribution and a `bblayers.conf` file which gives information about the layers included for building. Adding or removing layers can be done through this file, provided that the added layer, e.g., the cloned repository, is found on the local machine in the path described in this file.
 
 ## Build with Yocto <a name="building"></a>
+
 ### System Requirements <a name="SystemRequirements"></a>
+
 Some packages are required by the build host to be able to cover all build scenarios using the Yocto Project. In this section of the [Yocto Reference Manual](https://docs.yoctoproject.org/ref-manual/system-requirements.html#required-packages-for-the-build-host) you can find some helpful instructions based on the Linux distribution you are using. If you are using a host other than Linux, this section of the [Yocto Project Development Tasks Manual](https://docs.yoctoproject.org/dev-manual/start.html#preparing-the-build-host) can help you setting up your host system for using Yocto.
 
 ### Setting up the Yocto build environment <a name="Setting"></a>
+
 To be able to build an image with Yocto, the following setup should be followed:
 
 1. To make use of the manifest file, you have to install `repo` to get your Yocto environment ready. The `repo` utility was originally created to ease Android development. It makes it easy to reference several Git repositories within a top-level project, which you can then clone to your local machine all at once.
@@ -106,6 +113,7 @@ After the command `repo sync` is executed, you should be able to find three fold
 3. `build`: A link to the `conf` folder in `chargebyte-bsp`
 
 ### Adding or removing layers <a name="addorremove"></a>
+
 Adding a layer can be done either:
 
 **Manually**
@@ -124,6 +132,7 @@ You can then execute the command `bitbake-layers show-layers` to make sure that 
 To remove a layer, you can simply alter the `bblayers.conf` file by removing the layer path to make sure that the build system does not consider this layer while generating an image.
 
 ### Building an image <a name="build"></a>
+
 To correctly set configurations related to the hardware platforms Tarragon and EVAcharge SE, the following table gives you insight about the images you can build:
 
 | **`MACHINE`** | **`PROJECT`** | **`CUSTOMER`** | Resulting image |
@@ -148,6 +157,7 @@ export BB_ENV_PASSTHROUGH_ADDITIONS="PROJECT MACHINE"
 The resulting image will be found in `yocto/build/tmp/deploy/image/<machine>`.
 
 ## Appendix <a name="appendix"></a>
+
 ### How to change kernel configurations <a name="kernel"></a>
 
 It may occur that you want to adapt the system's kernel configuration to be suitable for your special requirements, e.g., adding drivers or packages like Docker. Here are the steps you need to follow to generate a Linux image based on your desired kernel configuration:
