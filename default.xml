@@ -14,7 +14,7 @@
   <project remote="oe"         revision="9b3b907f30b0d5b92d58c7e68289184fda733d3e" name="meta-openembedded"      path="source/meta-openembedded"/>
   <project remote="chargebyte" revision="thud"                                     name="meta-chargebyte"        path="source/meta-chargebyte"/>
   <project remote="chargebyte" revision="thud"                                     name="meta-chargebyte-distro" path="source/meta-chargebyte-distro"/>
-  <project remote="rauc"       revision="17599be65f6a5eabe6e4a246767c06dc4507f21a" name="meta-rauc"              path="source/meta-rauc"/>
+  <project remote="rauc"       revision="thud"                                     name="meta-rauc"              path="source/meta-rauc"/>
   <project remote="chargebyte" revision="thud"                                     name="chargebyte-bsp"         path="chargebyte-bsp">
     <linkfile dest="build/conf" src="conf"/>
   </project>
