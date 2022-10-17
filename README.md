@@ -36,8 +36,8 @@ As the Yocto Project is based on the concept of [layers](https://docs.yoctoproje
 | meta-chargebyte-distro | Distribution adaptations layer | https://github.com/chargebyte/meta-chargebyte-distro |
 | meta-freescale | Layer containing NXP hardware support metadata | https://git.yoctoproject.org/cgit/cgit.cgi/meta-freescale |
 | meta-openembedded | Collection of layers to supplement OE-Core with additional packages | https://github.com/openembedded/meta-openembedded |
-| meta-rauc| Layer controlling and performing secure software updates for embedded Linux | https://github.com/chargebyte/rauc |
-| poky | Build tool and metadata included in a reference distribution | https://github.com/chargebyte/poky |
+| meta-rauc| Layer controlling and performing secure software updates for embedded Linux | https://github.com/rauc/meta-rauc |
+| poky | Build tool and metadata included in a reference distribution | https://git.yoctoproject.org/poky |
 
 This layering approach increases flexibility to expand your project. You can add layers, which in turn would add packages essential for the distribution you want to build. Layers are usually available as repositories. Information on how to include or remove layers will be given in [Section 3.3](#addorremove). Note that no charging capabilities will be included in the Linux distribution created by this setup.
 
