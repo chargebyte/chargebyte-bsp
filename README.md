@@ -60,10 +60,10 @@ This "wrapper" repository has been created to facilitate downloading the above-m
   <project remote="yocto"        revision="kirkstone"                                name="poky"                   path="source"/>
   <project remote="yocto"        revision="kirkstone"                                name="meta-freescale"         path="source/meta-freescale"/>
   <project remote="oe"           revision="kirkstone"                                name="meta-openembedded"      path="source/meta-openembedded"/>
-  <project remote="chargebyte"   revision="kirkstone-next"                           name="meta-chargebyte"        path="source/meta-chargebyte"/>
-  <project remote="chargebyte"   revision="kirkstone-next"                           name="meta-chargebyte-distro" path="source/meta-chargebyte-distro"/>
+  <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte"        path="source/meta-chargebyte"/>
+  <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte-distro" path="source/meta-chargebyte-distro"/>
   <project remote="rauc"         revision="kirkstone"                                name="meta-rauc"              path="source/meta-rauc"/>
-  <project remote="chargebyte"   revision="kirkstone-next"                           name="chargebyte-bsp"         path="chargebyte-bsp">
+  <project remote="chargebyte"   revision="kirkstone"                                name="chargebyte-bsp"         path="chargebyte-bsp">
     <linkfile dest="build/conf" src="conf"/>
   </project>
 
@@ -103,7 +103,7 @@ echo 'export PATH="$PATH":~/bin' >> ~/.bashrc
 ```bash
 mkdir yocto
 cd yocto
-repo init -u https://github.com/chargebyte/chargebyte-bsp -b kirkstone-next
+repo init -u https://github.com/chargebyte/chargebyte-bsp -b kirkstone
 repo sync
 ```
 
