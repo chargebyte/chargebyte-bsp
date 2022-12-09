@@ -1,6 +1,6 @@
 # Yocto Environment for Tarragon and EVAcharge SE platforms
 
-This is a wrapper repository for chargebyte GmbH's Yocto BSP and distribution open-source layers.
+This is a wrapper repository that allows you to create a customized Linux root filesystem for EV charging infrastructure based on the open-source software stack **EVerest** https://github.com/EVerest/EVerest and chargebyte's hardware platform **Tarragon**.
 For problems and inquiries: https://tickets.in-tech-smartcharging.com/servicedesk
 
 ## Table of Contents
@@ -20,7 +20,7 @@ A.1 [How to change kernel configurations](#kernel)
 
 ## Introduction <a name="introduction"></a>
 
-This document helps you to get started with creating a Linux image based on board support packages (BSP) of Tarragon & EVAcharge SE - the hardware platforms offered by chargebyte GmbH. It defines what the layers included in this Yocto Project are, and how you can use them to create a basic Linux distribution, which you can then extend by adding further packages specific to your application.
+This document helps you to get started with creating a Linux root filesystem based on board support package (BSP) of Tarragon - the hardware platform offered by chargebyte GmbH for EV charging infrastructure and the open-source software stack EVerest. The document defines what the layers included in this Yocto Project are, and how you can use them to create a basic Linux distribution, which you can then extend by adding further packages specific to your application.
 
 If you are new to Yocto, it is recommended to read the [Yocto Overview and Concepts Manual](https://docs.yoctoproject.org/overview-manual/index.html). To get a quick introduction to Yocto, this [Software Overview](https://www.yoctoproject.org/software-overview) might be helpful. For further documentation on the Yocto Project, including information about dealing with BSP layers and working with the Yocto Project's build system **BitBake**, check the [Yocto Project Documentation](https://docs.yoctoproject.org/).
 
@@ -37,9 +37,11 @@ As the Yocto Project is based on the concept of [layers](https://docs.yoctoproje
 | meta-freescale | Layer containing NXP hardware support metadata | https://git.yoctoproject.org/cgit/cgit.cgi/meta-freescale |
 | meta-openembedded | Collection of layers to supplement OE-Core with additional packages | https://github.com/openembedded/meta-openembedded |
 | meta-rauc| Layer controlling and performing secure software updates for embedded Linux | https://github.com/rauc/meta-rauc |
+| meta-everest | Layer containing EVerest charging stack [^1]| https://github.com/EVerest/meta-everest |
+| meta-everest-chargebyte | Layer containing EVerest adjustments by chargebyte | https://github.com/chargebyte/meta-everest-chargebyte |
 | poky | Build tool and metadata included in a reference distribution | https://git.yoctoproject.org/poky |
 
-This layering approach increases flexibility to expand your project. You can add layers, which in turn would add packages essential for the distribution you want to build. Layers are usually available as repositories. Information on how to include or remove layers will be given in [Section 3.3](#addorremove). Note that no charging capabilities will be included in the Linux distribution created by this setup.
+This layering approach increases flexibility to expand your project. You can add layers, which in turn would add packages essential for the distribution you want to build. Layers are usually available as repositories. Information on how to include or remove layers will be given in [Section 3.3](#addorremove). Note that you would still need to create a firmware bundle for the Linux distribution created by this setup, as the output is only a root filesystem in an `ext4`. By doing that, you would be able to easily update the firmware on the Tarragon board using e.g., RAUC. Instructions about how to use the resulting `ext4` to create a firmware bundle are included in our Charge Control C user guide. Contact us to get the latest version of it.
 
 ### "Wrapper" Repository <a name="wrapper"></a>
 
@@ -48,22 +50,25 @@ This "wrapper" repository has been created to facilitate downloading the above-m
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
-  <default sync-j="4" revision="master"/>
+  <default sync-j="4" revision="kirkstone"/>
 
   <!-- remote repository definitions -->
-  <remote fetch="https://git.yoctoproject.org/git" name="yocto"/><!-- This represents a link to a repository, and it will have a name for further usage -->
+  <remote fetch="https://git.yoctoproject.org/git" name="yocto"/>
   <remote fetch="https://github.com/openembedded" name="oe"/>
   <remote fetch="https://github.com/chargebyte" name="chargebyte"/>
   <remote fetch="https://github.com/rauc" name="rauc"/>
+  <remote fetch="https://github.com/EVerest" name="everest"/>
 
   <!-- project definitions -->
-  <project remote="yocto"        revision="kirkstone"                                name="poky"                   path="source"/>
-  <project remote="yocto"        revision="kirkstone"                                name="meta-freescale"         path="source/meta-freescale"/>
-  <project remote="oe"           revision="kirkstone"                                name="meta-openembedded"      path="source/meta-openembedded"/>
-  <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte"        path="source/meta-chargebyte"/>
-  <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte-distro" path="source/meta-chargebyte-distro"/>
-  <project remote="rauc"         revision="kirkstone"                                name="meta-rauc"              path="source/meta-rauc"/>
-  <project remote="chargebyte"   revision="kirkstone"                                name="chargebyte-bsp"         path="chargebyte-bsp">
+  <project remote="yocto"        revision="kirkstone"                                name="poky"                    path="source"/>
+  <project remote="yocto"        revision="kirkstone"                                name="meta-freescale"          path="source/meta-freescale"/>
+  <project remote="oe"           revision="kirkstone"                                name="meta-openembedded"       path="source/meta-openembedded"/>
+  <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte"         path="source/meta-chargebyte"/>
+  <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte-distro"  path="source/meta-chargebyte-distro"/>
+  <project remote="rauc"         revision="kirkstone"                                name="meta-rauc"               path="source/meta-rauc"/>
+  <project remote="everest"      revision="kirkstone"                                name="meta-everest"            path="source/meta-everest"/>
+  <project remote="chargebyte"   revision="kirkstone"                                name="meta-everest-chargebyte" path="source/meta-everest-chargebyte"/>
+  <project remote="chargebyte"   revision="kirkstone-everest"                        name="chargebyte-bsp"          path="chargebyte-bsp">
     <linkfile dest="build/conf" src="conf"/>
   </project>
 
@@ -78,7 +83,7 @@ Apart from the manifest file, the repository also has a configuration folder. Th
 
 ### System Requirements <a name="SystemRequirements"></a>
 
-Some packages are required by the build host to be able to cover all build scenarios using the Yocto Project. In this section of the [Yocto Reference Manual](https://docs.yoctoproject.org/ref-manual/system-requirements.html#required-packages-for-the-build-host) you can find some helpful instructions based on the Linux distribution you are using. If you are using a host other than Linux, this section of the [Yocto Project Development Tasks Manual](https://docs.yoctoproject.org/dev-manual/start.html#preparing-the-build-host) can help you setting up your host system for using Yocto.
+Some packages are required by the build host to be able to cover all build scenarios using the Yocto Project. In this section of the [Yocto Reference Manual](https://docs.yoctoproject.org/ref-manual/system-requirements.html#required-packages-for-the-build-host) you can find some helpful instructions based on the Linux distribution you are using. If you are using a host other than Linux, this section of the [Yocto Project Development Tasks Manual](https://docs.yoctoproject.org/dev-manual/start.html#preparing-the-build-host) can help you setting up your host system for using Yocto. Some other prerequisites might be needed to build EVerest. These can be found in the [everest-core](https://github.com/EVerest/everest-core#readme) repository.
 
 ### Setting up the Yocto build environment <a name="Setting"></a>
 
@@ -103,7 +108,7 @@ echo 'export PATH="$PATH":~/bin' >> ~/.bashrc
 ```bash
 mkdir yocto
 cd yocto
-repo init -u https://github.com/chargebyte/chargebyte-bsp -b kirkstone
+repo init -u https://github.com/chargebyte/chargebyte-bsp -b kirkstone-everest
 repo sync
 ```
 
