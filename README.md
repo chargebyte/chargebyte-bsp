@@ -37,7 +37,7 @@ As the Yocto Project is based on the concept of [layers](https://docs.yoctoproje
 | meta-freescale | Layer containing NXP hardware support metadata | https://git.yoctoproject.org/cgit/cgit.cgi/meta-freescale |
 | meta-openembedded | Collection of layers to supplement OE-Core with additional packages | https://github.com/openembedded/meta-openembedded |
 | meta-rauc| Layer controlling and performing secure software updates for embedded Linux | https://github.com/rauc/meta-rauc |
-| meta-everest | Layer containing EVerest charging stack [^1]| https://github.com/EVerest/meta-everest |
+| meta-everest | Layer containing EVerest charging stack | https://github.com/EVerest/meta-everest |
 | meta-everest-chargebyte | Layer containing EVerest adjustments by chargebyte | https://github.com/chargebyte/meta-everest-chargebyte |
 | poky | Build tool and metadata included in a reference distribution | https://git.yoctoproject.org/poky |
 
