@@ -38,7 +38,7 @@ As the Yocto Project is based on the concept of [layers](https://docs.yoctoproje
 | meta-openembedded | Collection of layers to supplement OE-Core with additional packages | https://github.com/openembedded/meta-openembedded |
 | meta-rauc| Layer controlling and performing secure software updates for embedded Linux | https://github.com/rauc/meta-rauc |
 | meta-everest | Layer containing EVerest charging stack | https://github.com/EVerest/meta-everest |
-| meta-everest-chargebyte | Layer containing EVerest adjustments by chargebyte | https://github.com/chargebyte/meta-everest-chargebyte |
+| meta-chargebyte-everest | Layer containing EVerest adjustments by chargebyte | https://github.com/chargebyte/meta-chargebyte-everest |
 | poky | Build tool and metadata included in a reference distribution | https://git.yoctoproject.org/poky |
 
 This layering approach increases flexibility to expand your project. You can add layers, which in turn would add packages essential for the distribution you want to build. Layers are usually available as repositories. Information on how to include or remove layers will be given in [Section 3.3](#addorremove). Note that you would still need to create a firmware bundle for the Linux distribution created by this setup, as the output is only a root filesystem in an `ext4`. By doing that, you would be able to easily update the firmware on the Tarragon board using e.g., RAUC. Instructions about how to use the resulting `ext4` to create a firmware bundle are included in our Charge Control C user guide. Contact us to get the latest version of it.
@@ -67,7 +67,7 @@ This "wrapper" repository has been created to facilitate downloading the above-m
   <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte-distro"  path="source/meta-chargebyte-distro"/>
   <project remote="rauc"         revision="kirkstone"                                name="meta-rauc"               path="source/meta-rauc"/>
   <project remote="everest"      revision="kirkstone"                                name="meta-everest"            path="source/meta-everest"/>
-  <project remote="chargebyte"   revision="kirkstone"                                name="meta-everest-chargebyte" path="source/meta-everest-chargebyte"/>
+  <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte-everest" path="source/meta-chargebyte-everest"/>
   <project remote="chargebyte"   revision="kirkstone-everest"                        name="chargebyte-bsp"          path="chargebyte-bsp">
     <linkfile dest="build/conf" src="conf"/>
   </project>
