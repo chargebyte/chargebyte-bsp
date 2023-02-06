@@ -17,7 +17,7 @@
   <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte-distro"  path="source/meta-chargebyte-distro"/>
   <project remote="rauc"         revision="kirkstone"                                name="meta-rauc"               path="source/meta-rauc"/>
   <project remote="everest"      revision="kirkstone"                                name="meta-everest"            path="source/meta-everest"/>
-  <project remote="chargebyte"   revision="kirkstone"                                name="meta-everest-chargebyte" path="source/meta-everest-chargebyte"/>
+  <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte-everest" path="source/meta-chargebyte-everest"/>
   <project remote="chargebyte"   revision="kirkstone-everest"                        name="chargebyte-bsp"          path="chargebyte-bsp">
     <linkfile dest="build/conf" src="conf"/>
   </project>
