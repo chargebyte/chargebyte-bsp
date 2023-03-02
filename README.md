@@ -14,6 +14,7 @@ For problems and inquiries: https://tickets.in-tech-smartcharging.com/servicedes
 3.2 [Setting up the Yocto build environment](#Setting)  
 3.3 [Adding or removing layers](#addorremove)  
 3.4 [Building an Image](#build)  
+3.5 [Building a firmware update image with rauc framework](#rauc-update)  
 4. [Appendix](#appendix)  
 A.1 [How to change kernel configurations](#kernel)  
 
@@ -160,6 +161,25 @@ export BB_ENV_PASSTHROUGH_ADDITIONS="PROJECT MACHINE"
 3. Execute `bitbake core-image-minimal` to build the image.
 
 The resulting image will be found in `yocto/build/tmp/deploy/image/<machine>`.
+
+### Building a firmware update image with rauc framework  <a name="rauc-update"></a>
+
+The chargebyte's meta-chargebyte-everest layer is prepared for building a firmware update image using the rauc framework.
+
+If you don't want to fine-tune the update image further, the only remaining steps are:
+1. Create a firmware signing key if not already done. For this, we kindly refer to the good [rauc manual](https://rauc.readthedocs.io/).
+2. Provide the key and certificate location to the Yocto build environment. This can be done in different ways, e.g.,  
+  - extend your `yocto/build/conf/local.conf`, or
+  - use a `core-bundle.bbappend` file to extend the existing Bitbake recipe.  
+  In either variant, the file content must look like:
+```
+RAUC_KEY_FILE  = "/path/to/your/signing.key"
+RAUC_CERT_FILE = "/path/to/your/signing.crt"
+```
+3. Finally, execute `bitbake core-bundle` to build the firmware update image. The resulting image can be found in
+   `yocto/build/tmp/deploy/image/<machine>` and is named by default `EVerest-Firmware...image`.
+
+You can transfer this file to the target device and install it e.g. using `rauc install EVerest-Firmware...image`.
 
 ## Appendix <a name="appendix"></a>
 
