@@ -14,6 +14,7 @@ For problems and inquiries: https://tickets.in-tech-smartcharging.com/servicedes
 3.2 [Setting up the Yocto build environment](#Setting)  
 3.3 [Adding or removing layers](#addorremove)  
 3.4 [Building an Image](#build)  
+3.5 [Flashing an image](#flash)  
 4. [Appendix](#appendix)  
 A.1 [How to change kernel configurations](#kernel)  
 
@@ -154,7 +155,54 @@ export BB_ENV_PASSTHROUGH_ADDITIONS="PROJECT MACHINE"
 2. Execute `source yocto/source/oe-init-build-env build` which initializes the build environment and changes the directory to `yocto/build`.
 3. Execute `bitbake core-image-minimal` to build the image.
 
-The resulting image will be found in `yocto/build/tmp/deploy/image/<machine>`.
+The resulting image will be found in `yocto/build/tmp/deploy/image/<machine>` have a filename similar to `core-image-minimal-platform-1234567890-rootfs.ext4.gz`
+
+### Flashing an image <a name="flash"></a>
+
+The internal storage of the products Charge Control C and M is divided into several partitions and uses rauc to handle updates. If you are interested in adding rauc to your own image you can take a look at raucs documentation https://rauc.readthedocs.io/en/latest/integration.html#yocto .To flash an image it is important to identify the currently not in use partition because this will be our target partition. The following tables describe the partitioning for each Charge Control M and Charge Control C:
+
+**Charge Control M:**
+| **`Partition`** | **`Size`**  | Description |
+|--|--|--|
+| `/dev/mmcblk0p1` | `3 MB` | Bootloader Partition |
+| `/dev/mmcblk0p2` | `1 GB` | Root file system A |
+| `/dev/mmcblk0p3` | `1 GB` | Root file system B |
+| `/dev/mmcblk0p4` |  | Extended Partition Container |
+| `/dev/mmcblk0p5` | `1 GB` | Data Partition(/srv). This partition can be accessed by both file systems. |
+| `/dev/mmcblk0p6` | `128 MB` | Logging file system A (/var/log) |
+| `/dev/mmcblk0p7` | `128 MB` | Logging file system B (/var/log) |
+
+**Charge Control C:**
+| **`Partition`** | **`Size`**  | Description |
+|--|--|--|
+| `/dev/mmcblk0p1` | `1 GB` | Root file system A |
+| `/dev/mmcblk0p2` | `1 GB` | Root file system B |
+| `/dev/mmcblk0p3` |  | Extended Partition Container |
+| `/dev/mmcblk0p5` | `1 GB` | Data Partition(/srv). This partition can be accessed by both file systems. |
+| `/dev/mmcblk0p6` | `128 MB` | Logging file system A (/var/log) |
+| `/dev/mmcblk0p7` | `128 MB` | Logging file system B (/var/log) |
+
+1. To Identify the currently booted partition execute the following command and look for the partition which is marked as `good`. For this example we will be on partition `/dev/mmcblk0p1` on a Charge Control C.
+```bash
+rauc status
+```
+2. Copy your image to `/srv` using any client capable of SFTP.
+3. In the `/srv` directory execute the following command to flash your image to `/dev/mmcblk0p2`
+```bash
+gzcat core-image-minimal-tarragon-1234567890-rootfs.ext4.gz > /dev/mmcblk0p2
+```
+4. Mount `/dev/mmcblk0p2` and replace `/sbin/init` binary file with the following commands. (Omitting this step will format logging and data partitions)
+```bash
+mount /dev/mmcblk0p2 /mnt
+mv /mnt/sbin/init.orig /mnt/sbin/init
+umount /dev/mmcblk0p2 -l
+```
+5. Mark the other partition as active with rauc through the following command. 
+```bash
+rauc status mark-active other
+```
+6. Reboot 
+
 
 ## Appendix <a name="appendix"></a>
 
