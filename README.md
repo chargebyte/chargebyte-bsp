@@ -159,7 +159,7 @@ The resulting image will be found in `yocto/build/tmp/deploy/image/<machine>`, h
 
 ### Flashing an Image <a name="flash"></a>
 
-The internal storage of the products Charge Control C and M is divided into several partitions and uses RAUC to handle updates. If you are interested in adding RAUC to your own image you can take a look at RAUCs documentation https://rauc.readthedocs.io/en/latest/integration.html#yocto .To flash an image it is important to identify the currently not in use partition because this will be our target partition. The following tables describe the partitioning for each Charge Control M and Charge Control C:
+The internal storage of the products Charge Control C and M is divided into several partitions and uses RAUC to handle updates. If you are interested in adding RAUC to your own image you can take a look at RAUC's documentation https://rauc.readthedocs.io/en/latest/integration.html#yocto .To flash an image it is important to identify the currently not in use partition because this will be our target partition. The following tables describe the partitioning for each Charge Control M and Charge Control C:
 
 **Charge Control M:**
 | Partition | Size  | Description |
@@ -182,9 +182,30 @@ The internal storage of the products Charge Control C and M is divided into seve
 | /dev/mmcblk0p6 | 128 MB | Logging file system A (/var/log) |
 | /dev/mmcblk0p7 | 128 MB | Logging file system B (/var/log) |
 
-1. To identify the currently booted partition execute the following command and look for the partition which is marked as `good`. For this example we will be on partition `/dev/mmcblk0p1` on a Charge Control C.
+1. To identify the currently booted partition execute the following command and look for the partition which is marked with boot status `good`. For this example we will be on partition `/dev/mmcblk0p1` on a Charge Control C.
 ```bash
 rauc status
+```
+Output:
+```bash
+=== System Info ===
+Compatible: I2SE Tarragon
+Variant:
+Booted from: rootfs.1 (B) 
+
+=== Bootloader ===
+Activated: rootfs.1 (B)
+
+=== Slot States ===
+x [rootfs.1] (/dev/mmcblk0p1, ext4, booted)
+	 bootname: B
+	 mounted: / 
+	 boot status: good 
+  [customerfs.1] (/dev/mmcblk0p6, ext4, active) mounted: /var/log
+o [rootfs.0] (/dev/mmcblk0p2, ext4, inactive)
+	 bootname: A
+	 boot status: bad
+  [customerfs.0] (/dev/mmcblk0p7, ext4, inactive)
 ```
 2. Copy your image to `/srv` using any client capable of SFTP.
 3. In the `/srv` directory execute the following command to flash your image to `/dev/mmcblk0p2`
