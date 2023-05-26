@@ -1,4 +1,4 @@
-# Yocto Environment for Tarragon and EVAcharge SE platforms
+# Yocto Environment for Tarragon platform and EVerest
 
 This is a wrapper repository that allows you to create a customized Linux root filesystem for EV charging infrastructure based on the open-source software stack **EVerest** https://github.com/EVerest/EVerest and chargebyte's hardware platform **Tarragon**.
 For problems and inquiries: https://tickets.in-tech-smartcharging.com/servicedesk
@@ -14,7 +14,8 @@ For problems and inquiries: https://tickets.in-tech-smartcharging.com/servicedes
 3.2 [Setting up the Yocto build environment](#Setting)  
 3.3 [Adding or removing layers](#addorremove)  
 3.4 [Building an Image](#build)  
-3.5 [Building a firmware update image with rauc framework](#rauc-update)  
+3.5 [Flashing an Image](#flash)  
+3.6 [Building a firmware update image with rauc framework](#rauc-update)  
 4. [Appendix](#appendix)  
 A.1 [How to change kernel configurations](#kernel)  
 
@@ -29,11 +30,11 @@ If you are new to Yocto, it is recommended to read the [Yocto Overview and Conce
 
 ### Layers <a name="layers"></a>
 
-As the Yocto Project is based on the concept of [layers](https://docs.yoctoproject.org/dev-manual/common-tasks.html#understanding-and-creating-layers), the following table lists all the layers used to create a basic distribution based on chargebyte’s charge control platforms Tarragon and EVAcharge SE.
+As the Yocto Project is based on the concept of [layers](https://docs.yoctoproject.org/dev-manual/common-tasks.html#understanding-and-creating-layers), the following table lists all the layers used to create a basic distribution based on chargebyte’s charge control platform Tarragon.
 
 | Layer | Description | Repository |
 |--|--|--|
-| meta-chargebyte | BSP layer for Tarragon & EVAcharge SE | https://github.com/chargebyte/meta-chargebyte |
+| meta-chargebyte | BSP layer for Tarragon | https://github.com/chargebyte/meta-chargebyte |
 | meta-chargebyte-distro | Distribution adaptations layer | https://github.com/chargebyte/meta-chargebyte-distro |
 | meta-freescale | Layer containing NXP hardware support metadata | https://git.yoctoproject.org/cgit/cgit.cgi/meta-freescale |
 | meta-openembedded | Collection of layers to supplement OE-Core with additional packages | https://github.com/openembedded/meta-openembedded |
@@ -42,7 +43,7 @@ As the Yocto Project is based on the concept of [layers](https://docs.yoctoproje
 | meta-chargebyte-everest | Layer containing EVerest adjustments by chargebyte | https://github.com/chargebyte/meta-chargebyte-everest |
 | poky | Build tool and metadata included in a reference distribution | https://git.yoctoproject.org/poky |
 
-This layering approach increases flexibility to expand your project. You can add layers, which in turn would add packages essential for the distribution you want to build. Layers are usually available as repositories. Information on how to include or remove layers will be given in [Section 3.3](#addorremove). Note that you would still need to create a firmware bundle for the Linux distribution created by this setup, as the output is only a root filesystem in an `ext4`. By doing that, you would be able to easily update the firmware on the Tarragon board using e.g., RAUC. Instructions about how to use the resulting `ext4` to create a firmware bundle are included in our Charge Control C user guide. Contact us to get the latest version of it.
+This layering approach increases flexibility to expand your project. You can add layers, which in turn would add packages essential for the distribution you want to build. Layers are usually available as repositories. Information on how to include or remove layers will be given in [Section 3.3](#addorremove). Note that you would still need to create a firmware bundle for the Linux distribution created by this setup, as the output is only a root filesystem in an `ext4`. By doing that, you would be able to easily update the firmware on the Tarragon board using e.g., RAUC. Instructions about how to use the resulting `ext4` to create a firmware bundle are included in our Charge Control C user guide. Contact us to get the latest version of it. You can also follow the instructions in [Section 3.6](#rauc-update) where Yocto can be used to build a complete firmware update image using RAUC.
 
 ### "Wrapper" Repository <a name="wrapper"></a>
 
@@ -137,34 +138,88 @@ You can then execute the command `bitbake-layers show-layers` to make sure that 
 
 To remove a layer, you can simply alter the `bblayers.conf` file by removing the layer path to make sure that the build system does not consider this layer while generating an image.
 
-### Building an image <a name="build"></a>
+### Building an Image <a name="build"></a>
 
-To correctly set configurations related to the hardware platforms Tarragon and EVAcharge SE, the following table gives you insight about the images you can build:
+To correctly set configurations related to the hardware platform Tarragon, the following table gives you insight about the images you can build:
 
 | **`MACHINE`** | **`PROJECT`** | **`CUSTOMER`** | Resulting image |
 |--|--|--|--|
-| `tarragon` | `bsp` | `""` | Basic BSP image for Tarragon |
-| `tarragon` | `bsp` | `developer`[^1] | BSP image for Tarragon with additional developer packages |
-| `evachargese` | `bsp` | `""` | Basic BSP image for EVAcharge SE |
-| `evachargese` | `bsp` | `developer` | BSP image for EVAcharge SE with additional developer packages |
+| `tarragon` | `everest` | `""` | Basic BSP image for Tarragon |
+| `tarragon` | `everest` | `developer`[^1] | BSP image for Tarragon with additional developer packages |
 
 For building an image, you would need to do the following:
 1. Set the configurations for your build as mentioned in the table above. You can either:
   - Execute the following commands to e.g., set the machine to `tarragon` and project to `bsp`:
 ```bash
 export MACHINE=tarragon
-export PROJECT=bsp
+export PROJECT=everest
 export BB_ENV_PASSTHROUGH_ADDITIONS="PROJECT MACHINE"
 ```
   - Edit `yocto/build/conf/local.conf` directly. e.g., `MACHINE=...`.
 2. Execute `source yocto/source/oe-init-build-env build` which initializes the build environment and changes the directory to `yocto/build`.
 3. Execute `bitbake core-image-minimal` to build the image.
 
-The resulting image will be found in `yocto/build/tmp/deploy/image/<machine>`.
+The resulting image will be found in `yocto/build/tmp/deploy/image/<machine>`, having a filename similar to `core-image-minimal-platform-1234567890-rootfs.ext4.gz`
+
+### Flashing an Image <a name="flash"></a>
+
+The internal storage of the product Charge Control C (Tarragon) is divided into several partitions and uses RAUC to handle updates. If you are interested in adding RAUC to your own image you can take a look at RAUC's documentation https://rauc.readthedocs.io/en/latest/integration.html#yocto .To flash an image it is important to identify the currently not in use partition because this will be our target partition. The following tables describe the partitioning for Charge Control C:
+
+**Charge Control C:**
+| Partition | Size  | Description |
+|--|--|--|
+| /dev/mmcblk0p1 | 1 GB | Root file system A |
+| /dev/mmcblk0p2 | 1 GB | Root file system B |
+| /dev/mmcblk0p3 |  | Extended Partition Container |
+| /dev/mmcblk0p5 | 1 GB | Data Partition(/srv). This partition can be accessed by both file systems. |
+| /dev/mmcblk0p6 | 128 MB | Logging file system A (/var/log) |
+| /dev/mmcblk0p7 | 128 MB | Logging file system B (/var/log) |
+
+1. To identify the currently booted partition execute the following command and look for the partition which is marked with boot status `good`. For this example we will be on partition `/dev/mmcblk0p1` on a Charge Control C.
+```bash
+rauc status
+```
+Output:
+```bash
+=== System Info ===
+Compatible: I2SE Tarragon
+Variant:
+Booted from: rootfs.1 (B) 
+
+=== Bootloader ===
+Activated: rootfs.1 (B)
+
+=== Slot States ===
+x [rootfs.1] (/dev/mmcblk0p1, ext4, booted)
+	 bootname: B
+	 mounted: / 
+	 boot status: good 
+  [customerfs.1] (/dev/mmcblk0p6, ext4, active) mounted: /var/log
+o [rootfs.0] (/dev/mmcblk0p2, ext4, inactive)
+	 bootname: A
+	 boot status: bad
+  [customerfs.0] (/dev/mmcblk0p7, ext4, inactive)
+```
+2. Copy your image to `/srv` using any client capable of SFTP.
+3. In the `/srv` directory execute the following command to flash your image to `/dev/mmcblk0p2`
+```bash
+gzcat core-image-minimal-tarragon-1234567890-rootfs.ext4.gz > /dev/mmcblk0p2
+```
+4. Mount `/dev/mmcblk0p2` and replace `/sbin/init` binary file with the following commands. (Omitting this step will format logging and data partitions)
+```bash
+mount /dev/mmcblk0p2 /mnt
+mv /mnt/sbin/init.orig /mnt/sbin/init
+umount /dev/mmcblk0p2
+```
+5. Mark the other partition as active with RAUC through the following command. 
+```bash
+rauc status mark-active other
+```
+6. Reboot 
 
 ### Building a firmware update image with rauc framework  <a name="rauc-update"></a>
 
-The chargebyte's meta-chargebyte-everest layer is prepared for building a firmware update image using the rauc framework.
+The chargebyte's meta-chargebyte-everest layer is prepared for building a firmware update image using the RAUC framework.
 
 If you don't want to fine-tune the update image further, the only remaining steps are:
 1. Create a firmware signing key if not already done. For this, we kindly refer to the good [rauc manual](https://rauc.readthedocs.io/).
