@@ -1,7 +1,7 @@
 # Yocto Environment for Tarragon and EVAcharge SE platforms
 
 This is a wrapper repository for chargebyte GmbH's Yocto BSP and distribution open-source layers.
-For problems and inquiries: https://tickets.in-tech-smartcharging.com/servicedesk
+For problems and inquiries: https://tickets.chargebyte.com/servicedesk
 
 ## Table of Contents
 
@@ -159,7 +159,7 @@ The resulting image will be found in `yocto/build/tmp/deploy/image/<machine>`, h
 
 ### Flashing an Image <a name="flash"></a>
 
-The internal storage of the products Charge Control C and M is divided into several partitions and uses RAUC to handle updates. If you are interested in adding RAUC to your own image you can take a look at RAUC's documentation https://rauc.readthedocs.io/en/latest/integration.html#yocto .To flash an image it is important to identify the currently not in use partition because this will be our target partition. The following tables describe the partitioning for each Charge Control M and Charge Control C:
+The internal storage of the products Charge Control C (Tarragon) and M (EVAcharge SE) is divided into several partitions and uses RAUC to handle updates. If you are interested in adding RAUC to your own image you can take a look at RAUC's documentation https://rauc.readthedocs.io/en/latest/integration.html#yocto .To flash an image it is important to identify the currently not in use partition because this will be our target partition. The following tables describe the partitioning for each Charge Control M and Charge Control C:
 
 **Charge Control M:**
 | Partition | Size  | Description |
@@ -167,7 +167,7 @@ The internal storage of the products Charge Control C and M is divided into seve
 | /dev/mmcblk0p1 | 3 MB | Bootloader Partition |
 | /dev/mmcblk0p2 | 1 GB | Root file system A |
 | /dev/mmcblk0p3 | 1 GB | Root file system B |
-| /dev/mmcblk0p4` |  | Extended Partition Container |
+| /dev/mmcblk0p4 |  | Extended Partition Container |
 | /dev/mmcblk0p5 | 1 GB | Data Partition(/srv). This partition can be accessed by both file systems. |
 | /dev/mmcblk0p6 | 128 MB | Logging file system A (/var/log) |
 | /dev/mmcblk0p7 | 128 MB | Logging file system B (/var/log) |
