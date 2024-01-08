@@ -1,7 +1,7 @@
 # Yocto Environment for Tarragon platform and EVerest
 
 This is a wrapper repository that allows you to create a customized Linux root filesystem for EV charging infrastructure based on the open-source software stack **EVerest** https://github.com/EVerest/EVerest and chargebyte's hardware platform **Tarragon**.
-For problems and inquiries: https://tickets.in-tech-smartcharging.com/servicedesk
+For problems and inquiries: https://tickets.chargebyte.com/servicedesk
 
 ## Table of Contents
 
@@ -203,7 +203,7 @@ o [rootfs.0] (/dev/mmcblk0p2, ext4, inactive)
 2. Copy your image to `/srv` using any client capable of SFTP.
 3. In the `/srv` directory execute the following command to flash your image to `/dev/mmcblk0p2`
 ```bash
-gzcat core-image-minimal-tarragon-1234567890-rootfs.ext4.gz > /dev/mmcblk0p2
+zcat core-image-minimal-tarragon-1234567890-rootfs.ext4.gz > /dev/mmcblk0p2
 ```
 4. Mount `/dev/mmcblk0p2` and replace `/sbin/init` binary file with the following commands. (Omitting this step will format logging and data partitions)
 ```bash
