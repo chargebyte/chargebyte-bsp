@@ -37,6 +37,7 @@ As the Yocto Project is based on the concept of [layers](https://docs.yoctoproje
 | meta-chargebyte | BSP layer for Tarragon | https://github.com/chargebyte/meta-chargebyte |
 | meta-chargebyte-distro | Distribution adaptations layer | https://github.com/chargebyte/meta-chargebyte-distro |
 | meta-freescale | Layer containing NXP hardware support metadata | https://git.yoctoproject.org/cgit/cgit.cgi/meta-freescale |
+| meta-virtualization | Layer containing additional packages | https://git.yoctoproject.org/cgit/cgit.cgi/meta-virtualization |
 | meta-openembedded | Collection of layers to supplement OE-Core with additional packages | https://github.com/openembedded/meta-openembedded |
 | meta-rauc| Layer controlling and performing secure software updates for embedded Linux | https://github.com/rauc/meta-rauc |
 | meta-everest | Layer containing EVerest charging stack | https://github.com/EVerest/meta-everest |
@@ -64,6 +65,7 @@ This "wrapper" repository has been created to facilitate downloading the above-m
   <!-- project definitions -->
   <project remote="yocto"        revision="kirkstone"                                name="poky"                    path="source"/>
   <project remote="yocto"        revision="kirkstone"                                name="meta-freescale"          path="source/meta-freescale"/>
+  <project remote="yocto"        revision="kirkstone"                                name="meta-virtualization"     path="source/meta-virtualization"/>
   <project remote="oe"           revision="kirkstone"                                name="meta-openembedded"       path="source/meta-openembedded"/>
   <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte"         path="source/meta-chargebyte"/>
   <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte-distro"  path="source/meta-chargebyte-distro"/>
