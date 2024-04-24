@@ -1,7 +1,7 @@
 # Yocto Environment for Tarragon platform and EVerest
 
 This is a wrapper repository that allows you to create a customized Linux root filesystem for EV charging infrastructure based on the open-source software stack **EVerest** https://github.com/EVerest/EVerest and chargebyte's hardware platform **Tarragon**.
-For problems and inquiries: https://tickets.chargebyte.com/servicedesk
+For problems and inquiries: https://chargebyte.com/support
 
 ## Table of Contents
 
