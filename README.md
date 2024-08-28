@@ -33,12 +33,13 @@ As the Yocto Project is based on the concept of [layers](https://docs.yoctoproje
 
 | Layer | Description | Repository |
 |--|--|--|
-| meta-chargebyte | BSP layer for EVAcharge SE, Tarragon & Charge SOM | https://github.com/chargebyte/meta-chargebyte |
-| meta-chargebyte-distro | Distribution adaptations layer | https://github.com/chargebyte/meta-chargebyte-distro |
+| poky | Build tool and metadata included in a reference distribution | https://git.yoctoproject.org/poky |
 | meta-freescale | Layer containing NXP hardware support metadata | https://git.yoctoproject.org/cgit/cgit.cgi/meta-freescale |
 | meta-openembedded | Collection of layers to supplement OE-Core with additional packages | https://github.com/openembedded/meta-openembedded |
+| meta-security | Collection of security-related layers e.g. for TPM support | https://git.yoctoproject.org/meta-security |
 | meta-rauc| Layer controlling and performing secure software updates for embedded Linux | https://github.com/rauc/meta-rauc |
-| poky | Build tool and metadata included in a reference distribution | https://git.yoctoproject.org/poky |
+| meta-chargebyte | BSP layer for EVAcharge SE, Tarragon & Charge SOM | https://github.com/chargebyte/meta-chargebyte |
+| meta-chargebyte-distro | Distribution adaptations layer | https://github.com/chargebyte/meta-chargebyte-distro |
 
 This layering approach increases flexibility to expand your project. You can add layers, which in turn would add packages essential for the distribution you want to build. Layers are usually available as repositories. Information on how to include or remove layers will be given in [Section 3.3](#addorremove). Note that no charging capabilities will be included in the Linux distribution created by this setup.
 
@@ -61,6 +62,7 @@ This "wrapper" repository has been created to facilitate downloading the above-m
   <project remote="yocto"        revision="kirkstone"                                name="poky"                   path="source"/>
   <project remote="yocto"        revision="kirkstone"                                name="meta-freescale"         path="source/meta-freescale"/>
   <project remote="oe"           revision="kirkstone"                                name="meta-openembedded"      path="source/meta-openembedded"/>
+  <project remote="yocto"        revision="kirkstone"                                name="meta-security"          path="source/meta-security"/>
   <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte"        path="source/meta-chargebyte"/>
   <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte-distro" path="source/meta-chargebyte-distro"/>
   <project remote="rauc"         revision="kirkstone"                                name="meta-rauc"              path="source/meta-rauc"/>
