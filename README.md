@@ -21,7 +21,7 @@ A.1 [How to change kernel configurations](#kernel)
 
 ## Introduction <a name="introduction"></a>
 
-This document helps you to get started with creating a Linux image based on board support packages (BSP) of Tarragon & EVAcharge SE - the hardware platforms offered by chargebyte GmbH. It defines what the layers included in this Yocto Project are, and how you can use them to create a basic Linux distribution, which you can then extend by adding further packages specific to your application.
+This document helps you to get started with creating a Linux image based on board support packages (BSP) of EVAcharge SE, Tarragon and Charge SOM - the hardware platforms offered by chargebyte GmbH. It defines what the layers included in this Yocto Project are, and how you can use them to create a basic Linux distribution, which you can then extend by adding further packages specific to your application.
 
 If you are new to Yocto, it is recommended to read the [Yocto Overview and Concepts Manual](https://docs.yoctoproject.org/overview-manual/index.html). To get a quick introduction to Yocto, this [Software Overview](https://www.yoctoproject.org/software-overview) might be helpful. For further documentation on the Yocto Project, including information about dealing with BSP layers and working with the Yocto Project's build system **BitBake**, check the [Yocto Project Documentation](https://docs.yoctoproject.org/).
 
@@ -29,11 +29,11 @@ If you are new to Yocto, it is recommended to read the [Yocto Overview and Conce
 
 ### Layers <a name="layers"></a>
 
-As the Yocto Project is based on the concept of [layers](https://docs.yoctoproject.org/dev-manual/common-tasks.html#understanding-and-creating-layers), the following table lists all the layers used to create a basic distribution based on chargebyte’s charge control platforms Tarragon and EVAcharge SE.
+As the Yocto Project is based on the concept of [layers](https://docs.yoctoproject.org/dev-manual/common-tasks.html#understanding-and-creating-layers), the following table lists all the layers used to create a basic distribution based on chargebyte’s Linux platforms.
 
 | Layer | Description | Repository |
 |--|--|--|
-| meta-chargebyte | BSP layer for Tarragon & EVAcharge SE | https://github.com/chargebyte/meta-chargebyte |
+| meta-chargebyte | BSP layer for EVAcharge SE, Tarragon & Charge SOM | https://github.com/chargebyte/meta-chargebyte |
 | meta-chargebyte-distro | Distribution adaptations layer | https://github.com/chargebyte/meta-chargebyte-distro |
 | meta-freescale | Layer containing NXP hardware support metadata | https://git.yoctoproject.org/cgit/cgit.cgi/meta-freescale |
 | meta-openembedded | Collection of layers to supplement OE-Core with additional packages | https://github.com/openembedded/meta-openembedded |
@@ -136,20 +136,23 @@ To remove a layer, you can simply alter the `bblayers.conf` file by removing the
 
 To correctly set configurations related to the hardware platforms Tarragon and EVAcharge SE, the following table gives you insight about the images you can build:
 
-| **`MACHINE`** | **`PROJECT`** | **`CUSTOMER`** | Resulting image |
-|--|--|--|--|
-| `tarragon` | `bsp` | `""` | Basic BSP image for Tarragon |
-| `tarragon` | `bsp` | `developer`[^1] | BSP image for Tarragon with additional developer packages |
-| `evachargese` | `bsp` | `""` | Basic BSP image for EVAcharge SE |
-| `evachargese` | `bsp` | `developer` | BSP image for EVAcharge SE with additional developer packages |
+| **`MACHINE`** | **`SUBMACHINE`** | **`PROJECT`** | **`CUSTOMER`**  | Resulting image                                                        |
+|---------------|------------------|---------------|-----------------|------------------------------------------------------------------------|
+| `evachargese` | `""`             | `bsp`         | `""`            | Basic BSP image for EVAcharge SE                                       |
+| `evachargese` | `""`             | `bsp`         | `developer`     | BSP image for EVAcharge SE with additional developer packages          |
+| `tarragon`    | `""`             | `bsp`         | `""`            | Basic BSP image for Tarragon                                           |
+| `tarragon`    | `""`             | `bsp`         | `developer`[^1] | BSP image for Tarragon with additional developer packages              |
+| `chargesom`   | `dc-evb`         | `bsp`         | `""`            | Basic BSP image for Charge SOM with DC EVB carrier board               |
+| `chargesom`   | `dc-evb`         | `bsp`         | `developer`[^1] | BSP image for Charge SOM with DC EVB and additional developer packages |
 
 For building an image, you would need to do the following:
 1. Set the configurations for your build as mentioned in the table above. You can either:
   - Execute the following commands to e.g., set the machine to `tarragon` and project to `bsp`:
 ```bash
 export MACHINE=tarragon
+export SUBMACHINE=""
 export PROJECT=bsp
-export BB_ENV_PASSTHROUGH_ADDITIONS="PROJECT MACHINE"
+export BB_ENV_PASSTHROUGH_ADDITIONS="PROJECT MACHINE SUBMACHINE"
 ```
   - Edit `yocto/build/conf/local.conf` directly. e.g., `MACHINE=...`.
 2. Execute `source yocto/source/oe-init-build-env build` which initializes the build environment and changes the directory to `yocto/build`.
@@ -159,7 +162,11 @@ The resulting image will be found in `yocto/build/tmp/deploy/image/<machine>`, h
 
 ### Flashing an Image <a name="flash"></a>
 
-The internal storage of the products Charge Control C (Tarragon) and M (EVAcharge SE) is divided into several partitions and uses RAUC to handle updates. If you are interested in adding RAUC to your own image you can take a look at RAUC's documentation https://rauc.readthedocs.io/en/latest/integration.html#yocto .To flash an image it is important to identify the currently not in use partition because this will be our target partition. The following tables describe the partitioning for each Charge Control M and Charge Control C:
+The internal storage of the products Charge Control C (Tarragon), M (EVAcharge SE) and Charge SOM is divided into several partitions and uses RAUC to handle updates.
+If you are interested in adding RAUC to your own image you can take a look at RAUC's documentation https://rauc.readthedocs.io/en/latest/integration.html#yocto .
+To flash an image it is important to identify the currently not-in-use partition because this will be our target partition.
+
+The following tables describe the partitioning for Charge Control M and Charge Control C:
 
 **Charge Control M:**
 | Partition | Size  | Description |
@@ -179,6 +186,18 @@ The internal storage of the products Charge Control C (Tarragon) and M (EVAcharg
 | /dev/mmcblk0p2 | 1 GB | Root file system B |
 | /dev/mmcblk0p3 |  | Extended Partition Container |
 | /dev/mmcblk0p5 | 1 GB | Data Partition(/srv). This partition can be accessed by both file systems. |
+| /dev/mmcblk0p6 | 128 MB | Logging file system A (/var/log) |
+| /dev/mmcblk0p7 | 128 MB | Logging file system B (/var/log) |
+
+A similar partitioning is used on the eMMC of the Charge SOM based products:
+
+**Charge SOM:**
+| Partition | Size  | Description |
+|--|--|--|
+| /dev/mmcblk0p1 | 2 GB | Root file system A |
+| /dev/mmcblk0p2 | 2 GB | Root file system B |
+| /dev/mmcblk0p3 |  | Extended Partition Container |
+| /dev/mmcblk0p5 | ~2.7 GB | Data Partition(/srv). This partition can be accessed by both file systems. |
 | /dev/mmcblk0p6 | 128 MB | Logging file system A (/var/log) |
 | /dev/mmcblk0p7 | 128 MB | Logging file system B (/var/log) |
 
