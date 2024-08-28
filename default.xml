@@ -3,7 +3,7 @@
   <default sync-j="4" revision="kirkstone"/>
 
   <!-- remote repository definitions -->
-  <remote fetch="https://git.yoctoproject.org/git" name="yocto"/>
+  <remote fetch="https://git.yoctoproject.org" name="yocto"/>
   <remote fetch="https://github.com/openembedded" name="oe"/>
   <remote fetch="https://github.com/chargebyte" name="chargebyte"/>
   <remote fetch="https://github.com/rauc" name="rauc"/>
