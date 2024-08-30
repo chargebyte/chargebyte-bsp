@@ -1,4 +1,4 @@
-# Yocto Environment for Tarragon and EVAcharge SE platforms
+# Yocto Environment for chargebyte's Linux platforms
 
 This is a wrapper repository for chargebyte GmbH's Yocto BSP and distribution open-source layers.
 For problems and inquiries: https://chargebyte.com/support
