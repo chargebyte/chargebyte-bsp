@@ -1,6 +1,7 @@
-# Yocto Environment for Tarragon platform and EVerest
+# Yocto Environment for chargebyte's Linux platforms and EVerest
 
-This is a wrapper repository that allows you to create a customized Linux root filesystem for EV charging infrastructure based on the open-source software stack **EVerest** https://github.com/EVerest/EVerest and chargebyte's hardware platform **Tarragon**.
+This is a wrapper repository that allows you to create a customized Linux root filesystem for EV charging infrastructure based on the open-source software stack **EVerest** https://github.com/EVerest/EVerest and chargebyte's hardware platforms **Tarragon** or **Charge SOM**.
+
 For problems and inquiries: https://chargebyte.com/support
 
 ## Table of Contents
@@ -22,7 +23,7 @@ A.1 [How to change kernel configurations](#kernel)
 
 ## Introduction <a name="introduction"></a>
 
-This document helps you to get started with creating a Linux root filesystem based on board support package (BSP) of Tarragon - the hardware platform offered by chargebyte GmbH for EV charging infrastructure and the open-source software stack EVerest. The document defines what the layers included in this Yocto Project are, and how you can use them to create a basic Linux distribution, which you can then extend by adding further packages specific to your application.
+This document helps you to get started with creating a Linux root filesystem based on board support package (BSP) of Tarragon or Charge SOM - the hardware platforms offered by chargebyte GmbH for EV charging infrastructure and the open-source software stack EVerest. The document defines what the layers included in this Yocto Project are, and how you can use them to create a basic Linux distribution, which you can then extend by adding further packages specific to your application.
 
 If you are new to Yocto, it is recommended to read the [Yocto Overview and Concepts Manual](https://docs.yoctoproject.org/overview-manual/index.html). To get a quick introduction to Yocto, this [Software Overview](https://www.yoctoproject.org/software-overview) might be helpful. For further documentation on the Yocto Project, including information about dealing with BSP layers and working with the Yocto Project's build system **BitBake**, check the [Yocto Project Documentation](https://docs.yoctoproject.org/).
 
@@ -30,21 +31,22 @@ If you are new to Yocto, it is recommended to read the [Yocto Overview and Conce
 
 ### Layers <a name="layers"></a>
 
-As the Yocto Project is based on the concept of [layers](https://docs.yoctoproject.org/dev-manual/common-tasks.html#understanding-and-creating-layers), the following table lists all the layers used to create a basic distribution based on chargebyte’s charge control platform Tarragon.
+As the Yocto Project is based on the concept of [layers](https://docs.yoctoproject.org/dev-manual/common-tasks.html#understanding-and-creating-layers), the following table lists all the layers used to create a basic distribution based on chargebyte’s Linux platforms.
 
 | Layer | Description | Repository |
 |--|--|--|
-| meta-chargebyte | BSP layer for Tarragon | https://github.com/chargebyte/meta-chargebyte |
-| meta-chargebyte-distro | Distribution adaptations layer | https://github.com/chargebyte/meta-chargebyte-distro |
+| poky | Build tool and metadata included in a reference distribution | https://git.yoctoproject.org/poky |
 | meta-freescale | Layer containing NXP hardware support metadata | https://git.yoctoproject.org/cgit/cgit.cgi/meta-freescale |
-| meta-virtualization | Layer containing additional packages | https://git.yoctoproject.org/cgit/cgit.cgi/meta-virtualization |
 | meta-openembedded | Collection of layers to supplement OE-Core with additional packages | https://github.com/openembedded/meta-openembedded |
+| meta-security | Collection of security-related layers e.g. for TPM support | https://git.yoctoproject.org/meta-security |
+| meta-virtualization | Layer containing additional packages | https://git.yoctoproject.org/cgit/cgit.cgi/meta-virtualization |
 | meta-rauc| Layer controlling and performing secure software updates for embedded Linux | https://github.com/rauc/meta-rauc |
+| meta-chargebyte | BSP layer for EVAcharge SE, Tarragon & Charge SOM | https://github.com/chargebyte/meta-chargebyte |
+| meta-chargebyte-distro | Distribution adaptations layer | https://github.com/chargebyte/meta-chargebyte-distro |
 | meta-everest | Layer containing EVerest charging stack | https://github.com/EVerest/meta-everest |
 | meta-chargebyte-everest | Layer containing EVerest adjustments by chargebyte | https://github.com/chargebyte/meta-chargebyte-everest |
-| poky | Build tool and metadata included in a reference distribution | https://git.yoctoproject.org/poky |
 
-This layering approach increases flexibility to expand your project. You can add layers, which in turn would add packages essential for the distribution you want to build. Layers are usually available as repositories. Information on how to include or remove layers will be given in [Section 3.3](#addorremove). Note that you would still need to create a firmware bundle for the Linux distribution created by this setup, as the output is only a root filesystem in an `ext4`. By doing that, you would be able to easily update the firmware on the Tarragon board using e.g., RAUC. Instructions about how to use the resulting `ext4` to create a firmware bundle are included in our Charge Control C user guide. Contact us to get the latest version of it. You can also follow the instructions in [Section 3.6](#rauc-update) where Yocto can be used to build a complete firmware update image using RAUC.
+This layering approach increases flexibility to expand your project. You can add layers, which in turn would add packages essential for the distribution you want to build. Layers are usually available as repositories. Information on how to include or remove layers will be given in [Section 3.3](#addorremove).
 
 ### "Wrapper" Repository <a name="wrapper"></a>
 
@@ -67,6 +69,7 @@ This "wrapper" repository has been created to facilitate downloading the above-m
   <project remote="yocto"        revision="kirkstone"                                name="meta-freescale"          path="source/meta-freescale"/>
   <project remote="yocto"        revision="kirkstone"                                name="meta-virtualization"     path="source/meta-virtualization"/>
   <project remote="oe"           revision="kirkstone"                                name="meta-openembedded"       path="source/meta-openembedded"/>
+  <project remote="yocto"        revision="kirkstone"                                name="meta-security"           path="source/meta-security"/>
   <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte"         path="source/meta-chargebyte"/>
   <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte-distro"  path="source/meta-chargebyte-distro"/>
   <project remote="rauc"         revision="kirkstone"                                name="meta-rauc"               path="source/meta-rauc"/>
@@ -101,7 +104,7 @@ curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > ~/bin/rep
 chmod a+x ~/bin/repo
 ```
 
-You need to also make sure that `~/bin` is added to your `PATH` variable (Usually the directory is added automatically in Ubuntu).
+You need to also make sure that `~/bin` is added to your `PATH` variable (usually the directory is added automatically in Ubuntu).
 
 ```bash
 echo 'export PATH="$PATH":~/bin' >> ~/.bashrc
@@ -142,22 +145,25 @@ To remove a layer, you can simply alter the `bblayers.conf` file by removing the
 
 ### Building an Image <a name="build"></a>
 
-To correctly set configurations related to the hardware platform Tarragon, the following table gives you insight about the images you can build:
+To correctly set configurations related to the hardware platform Tarragon or Charge SOM, the following table gives you insight about the images you can build:
 
-| **`MACHINE`** | **`PROJECT`** | **`CUSTOMER`** | Resulting image |
-|--|--|--|--|
-| `tarragon` | `everest` | `""` | Basic BSP image for Tarragon |
-| `tarragon` | `everest` | `developer`[^1] | BSP image for Tarragon with additional developer packages |
+| **`MACHINE`** | **`SUBMACHINE`** | **`PROJECT`** | **`CUSTOMER`**  | Resulting image                                                        |
+|---------------|------------------|---------------|-----------------|------------------------------------------------------------------------|
+| `tarragon`    | `""`             | `everest`     | `""`            | Basic BSP image for Tarragon                                           |
+| `tarragon`    | `""`             | `everest`     | `developer`[^1] | BSP image for Tarragon with additional developer packages              |
+| `chargesom`   | `dc-evb`         | `everest`     | `""`            | Basic BSP image for Charge SOM with DC EVB carrier board               |
+| `chargesom`   | `dc-evb`         | `everest`     | `developer`[^1] | BSP image for Charge SOM with DC EVB and additional developer packages |
 
-For building an image, you would need to do the following:
+For building an image, here in the example for Tarragon, you would need to do the following:
 1. Set the configurations for your build as mentioned in the table above. You can either:
   - Execute the following commands to e.g., set the machine to `tarragon` and project to `bsp`:
 ```bash
 export MACHINE=tarragon
+export SUBMACHINE=""
 export PROJECT=everest
-export BB_ENV_PASSTHROUGH_ADDITIONS="PROJECT MACHINE"
+export BB_ENV_PASSTHROUGH_ADDITIONS="PROJECT MACHINE SUBMACHINE"
 ```
-  - Edit `yocto/build/conf/local.conf` directly. e.g., `MACHINE=...`.
+  - Edit `yocto/build/conf/local.conf` directly. e.g., `MACHINE=...`, `SUBMACHINE=...`.
 2. Execute `source yocto/source/oe-init-build-env build` which initializes the build environment and changes the directory to `yocto/build`.
 3. Execute `bitbake core-image-minimal` to build the image.
 
@@ -165,7 +171,11 @@ The resulting image will be found in `yocto/build/tmp/deploy/image/<machine>`, h
 
 ### Flashing an Image <a name="flash"></a>
 
-The internal storage of the product Charge Control C (Tarragon) is divided into several partitions and uses RAUC to handle updates. If you are interested in adding RAUC to your own image you can take a look at RAUC's documentation https://rauc.readthedocs.io/en/latest/integration.html#yocto .To flash an image it is important to identify the currently not in use partition because this will be our target partition. The following tables describe the partitioning for Charge Control C:
+The internal storage of the product Charge Control C (Tarragon) and Charge SOM is divided into several partitions and uses RAUC to handle updates.
+If you are interested in adding RAUC to your own image you can take a look at RAUC's documentation https://rauc.readthedocs.io/en/latest/integration.html#yocto .
+To flash an image it is important to identify the currently not in use partition because this will be our target partition.
+
+The following tables describe the partitioning for Charge Control C:
 
 **Charge Control C:**
 | Partition | Size  | Description |
@@ -174,6 +184,18 @@ The internal storage of the product Charge Control C (Tarragon) is divided into 
 | /dev/mmcblk0p2 | 1 GB | Root file system B |
 | /dev/mmcblk0p3 |  | Extended Partition Container |
 | /dev/mmcblk0p5 | 1 GB | Data Partition(/srv). This partition can be accessed by both file systems. |
+| /dev/mmcblk0p6 | 128 MB | Logging file system A (/var/log) |
+| /dev/mmcblk0p7 | 128 MB | Logging file system B (/var/log) |
+
+A similar partitioning is used on the eMMC of the Charge SOM based products:
+
+**Charge SOM:**
+| Partition | Size  | Description |
+|--|--|--|
+| /dev/mmcblk0p1 | 2 GB | Root file system A |
+| /dev/mmcblk0p2 | 2 GB | Root file system B |
+| /dev/mmcblk0p3 |  | Extended Partition Container |
+| /dev/mmcblk0p5 | ~2.7 GB | Data Partition(/srv). This partition can be accessed by both file systems. |
 | /dev/mmcblk0p6 | 128 MB | Logging file system A (/var/log) |
 | /dev/mmcblk0p7 | 128 MB | Logging file system B (/var/log) |
 
