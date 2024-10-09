@@ -38,6 +38,8 @@ As the Yocto Project is based on the concept of [layers](https://docs.yoctoproje
 | meta-openembedded | Collection of layers to supplement OE-Core with additional packages | https://github.com/openembedded/meta-openembedded |
 | meta-security | Collection of security-related layers e.g. for TPM support | https://git.yoctoproject.org/meta-security |
 | meta-rauc| Layer controlling and performing secure software updates for embedded Linux | https://github.com/rauc/meta-rauc |
+| meta-qt5 | Layer for Qt5 components | https://github.com/meta-qt5/meta-qt5 |
+| meta-nymea | Layer for nymea.io | https://github.com/nymea/meta-nymea |
 | meta-chargebyte | BSP layer for EVAcharge SE, Tarragon & Charge SOM | https://github.com/chargebyte/meta-chargebyte |
 | meta-chargebyte-distro | Distribution adaptations layer | https://github.com/chargebyte/meta-chargebyte-distro |
 
