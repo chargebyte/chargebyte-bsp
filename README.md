@@ -38,6 +38,8 @@ As the Yocto Project is based on the concept of [layers](https://docs.yoctoproje
 | meta-openembedded | Collection of layers to supplement OE-Core with additional packages | https://github.com/openembedded/meta-openembedded |
 | meta-security | Collection of security-related layers e.g. for TPM support | https://git.yoctoproject.org/meta-security |
 | meta-rauc| Layer controlling and performing secure software updates for embedded Linux | https://github.com/rauc/meta-rauc |
+| meta-qt5 | Layer for Qt5 components | https://github.com/meta-qt5/meta-qt5 |
+| meta-nymea | Layer for nymea.io | https://github.com/nymea/meta-nymea |
 | meta-chargebyte | BSP layer for EVAcharge SE, Tarragon & Charge SOM | https://github.com/chargebyte/meta-chargebyte |
 | meta-chargebyte-distro | Distribution adaptations layer | https://github.com/chargebyte/meta-chargebyte-distro |
 
@@ -50,23 +52,27 @@ This "wrapper" repository has been created to facilitate downloading the above-m
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
-  <default sync-j="4" revision="master"/>
+  <default sync-j="4" revision="kirkstone"/>
 
   <!-- remote repository definitions -->
-  <remote fetch="https://git.yoctoproject.org/git" name="yocto"/><!-- This represents a link to a repository, and it will have a name for further usage -->
+  <remote fetch="https://git.yoctoproject.org" name="yocto"/>
   <remote fetch="https://github.com/openembedded" name="oe"/>
   <remote fetch="https://github.com/chargebyte" name="chargebyte"/>
   <remote fetch="https://github.com/rauc" name="rauc"/>
+  <remote fetch="https://github.com/meta-qt5" name="qt5"/>
+  <remote fetch="https://github.com/nymea" name="nymea"/>
 
   <!-- project definitions -->
-  <project remote="yocto"        revision="kirkstone"                                name="poky"                   path="source"/>
-  <project remote="yocto"        revision="kirkstone"                                name="meta-freescale"         path="source/meta-freescale"/>
-  <project remote="oe"           revision="kirkstone"                                name="meta-openembedded"      path="source/meta-openembedded"/>
-  <project remote="yocto"        revision="kirkstone"                                name="meta-security"          path="source/meta-security"/>
-  <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte"        path="source/meta-chargebyte"/>
-  <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte-distro" path="source/meta-chargebyte-distro"/>
-  <project remote="rauc"         revision="kirkstone"                                name="meta-rauc"              path="source/meta-rauc"/>
-  <project remote="chargebyte"   revision="kirkstone"                                name="chargebyte-bsp"         path="chargebyte-bsp">
+  <project remote="yocto"        revision="kirkstone"                                name="poky"                     path="source"/>
+  <project remote="yocto"        revision="kirkstone"                                name="meta-freescale"           path="source/meta-freescale"/>
+  <project remote="oe"           revision="kirkstone"                                name="meta-openembedded"        path="source/meta-openembedded"/>
+  <project remote="yocto"        revision="kirkstone"                                name="meta-security"            path="source/meta-security"/>
+  <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte"          path="source/meta-chargebyte"/>
+  <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte-distro"   path="source/meta-chargebyte-distro"/>
+  <project remote="rauc"         revision="2eb0d2af94c63f4bc5b52e5f7c5a36000bfd7016" name="meta-rauc"                path="source/meta-rauc"/>
+  <project remote="qt5"          revision="kirkstone"                                name="meta-qt5"                 path="source/meta-qt5"/>
+  <project remote="nymea"        revision="kirkstone"                                name="meta-nymea"               path="source/meta-nymea"/>
+  <project remote="chargebyte"   revision="kirkstone"                                name="chargebyte-bsp"           path="chargebyte-bsp">
     <linkfile dest="build/conf" src="conf"/>
   </project>
 
