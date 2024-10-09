@@ -7,20 +7,24 @@
   <remote fetch="https://github.com/openembedded" name="oe"/>
   <remote fetch="https://github.com/chargebyte" name="chargebyte"/>
   <remote fetch="https://github.com/rauc" name="rauc"/>
+  <remote fetch="https://github.com/meta-qt5" name="qt5"/>
+  <remote fetch="https://github.com/nymea" name="nymea"/>
   <remote fetch="https://github.com/EVerest" name="everest"/>
 
   <!-- project definitions -->
-  <project remote="yocto"        revision="kirkstone"                                name="poky"                    path="source"/>
-  <project remote="yocto"        revision="kirkstone"                                name="meta-freescale"          path="source/meta-freescale"/>
-  <project remote="yocto"        revision="kirkstone"                                name="meta-virtualization"     path="source/meta-virtualization"/>
-  <project remote="oe"           revision="kirkstone"                                name="meta-openembedded"       path="source/meta-openembedded"/>
-  <project remote="yocto"        revision="kirkstone"                                name="meta-security"           path="source/meta-security"/>
-  <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte"         path="source/meta-chargebyte"/>
-  <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte-distro"  path="source/meta-chargebyte-distro"/>
-  <project remote="rauc"         revision="2eb0d2af94c63f4bc5b52e5f7c5a36000bfd7016" name="meta-rauc"               path="source/meta-rauc"/>
-  <project remote="everest"      revision="kirkstone"                                name="meta-everest"            path="source/meta-everest"/>
-  <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte-everest" path="source/meta-chargebyte-everest"/>
-  <project remote="chargebyte"   revision="kirkstone-everest"                        name="chargebyte-bsp"          path="chargebyte-bsp">
+  <project remote="yocto"        revision="kirkstone"                                name="poky"                     path="source"/>
+  <project remote="yocto"        revision="kirkstone"                                name="meta-freescale"           path="source/meta-freescale"/>
+  <project remote="yocto"        revision="kirkstone"                                name="meta-virtualization"      path="source/meta-virtualization"/>
+  <project remote="oe"           revision="kirkstone"                                name="meta-openembedded"        path="source/meta-openembedded"/>
+  <project remote="yocto"        revision="kirkstone"                                name="meta-security"            path="source/meta-security"/>
+  <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte"          path="source/meta-chargebyte"/>
+  <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte-distro"   path="source/meta-chargebyte-distro"/>
+  <project remote="rauc"         revision="2eb0d2af94c63f4bc5b52e5f7c5a36000bfd7016" name="meta-rauc"                path="source/meta-rauc"/>
+  <project remote="qt5"          revision="kirkstone"                                name="meta-qt5"                 path="source/meta-qt5"/>
+  <project remote="nymea"        revision="kirkstone"                                name="meta-nymea"               path="source/meta-nymea"/>
+  <project remote="everest"      revision="kirkstone"                                name="meta-everest"             path="source/meta-everest"/>
+  <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte-everest"  path="source/meta-chargebyte-everest"/>
+  <project remote="chargebyte"   revision="kirkstone-everest"                        name="chargebyte-bsp"           path="chargebyte-bsp">
     <linkfile dest="build/conf" src="conf"/>
   </project>
 
