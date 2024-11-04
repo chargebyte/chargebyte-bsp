@@ -1,6 +1,7 @@
-# Yocto Environment for chargebyte's Linux platforms
+# Yocto Environment for chargebyte's Linux platforms and EVerest
 
-This is a wrapper repository that allows you to create a customized Linux root filesystem for EV charging infrastructure based on the open-source software stack **EVerest** https://github.com/EVerest/EVerest and chargebyte's hardware platforms **Tarragon** and **Charge SOM**.
+This is a wrapper repository that allows you to create a customized Linux root filesystem for EV charging infrastructure based on the open-source software stack **EVerest** https://github.com/EVerest/EVerest and chargebyte's hardware platforms **Tarragon** or **Charge SOM**.
+
 For problems and inquiries: https://chargebyte.com/support
 
 ## Table of Contents
@@ -22,7 +23,7 @@ A.1 [How to change kernel configurations](#kernel)
 
 ## Introduction <a name="introduction"></a>
 
-This document helps you to get started with creating a Linux image based on board support packages (BSP) of EVAcharge SE, Tarragon and Charge SOM - the hardware platforms offered by chargebyte GmbH. It defines what the layers included in this Yocto Project are, and how you can use them to create a basic Linux distribution, which you can then extend by adding further packages specific to your application.
+This document helps you to get started with creating a Linux root filesystem based on board support package (BSP) of Tarragon or Charge SOM - the hardware platforms offered by chargebyte GmbH for EV charging infrastructure and the open-source software stack EVerest. The document defines what the layers included in this Yocto Project are, and how you can use them to create a basic Linux distribution, which you can then extend by adding further packages specific to your application.
 
 If you are new to Yocto, it is recommended to read the [Yocto Overview and Concepts Manual](https://docs.yoctoproject.org/overview-manual/index.html). To get a quick introduction to Yocto, this [Software Overview](https://www.yoctoproject.org/software-overview) might be helpful. For further documentation on the Yocto Project, including information about dealing with BSP layers and working with the Yocto Project's build system **BitBake**, check the [Yocto Project Documentation](https://docs.yoctoproject.org/).
 
@@ -109,7 +110,7 @@ curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > ~/bin/rep
 chmod a+x ~/bin/repo
 ```
 
-You need to also make sure that `~/bin` is added to your `PATH` variable (Usually the directory is added automatically in Ubuntu).
+You need to also make sure that `~/bin` is added to your `PATH` variable (usually the directory is added automatically in Ubuntu).
 
 ```bash
 echo 'export PATH="$PATH":~/bin' >> ~/.bashrc
