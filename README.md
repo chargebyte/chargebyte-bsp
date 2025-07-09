@@ -6,19 +6,19 @@ For problems and inquiries: https://chargebyte.com/support
 
 ## Table of Contents
 
-1. [Introduction](#introduction)  
-2. [Background](#background)  
-2.1 [Layers](#layers)  
-2.2 ["Wrapper" Repository](#wrapper)  
-3. [Build with Yocto](#building)  
-3.1 [System Requirements](#SystemRequirements)  
-3.2 [Setting up the Yocto build environment](#Setting)  
-3.3 [Adding or removing layers](#addorremove)  
-3.4 [Building an Image](#build)  
-3.5 [Flashing an Image](#flash)  
-3.6 [Building a firmware update image with rauc framework](#rauc-update)  
-4. [Appendix](#appendix)  
-A.1 [How to change kernel configurations](#kernel)  
+1. [Introduction](#introduction)
+2. [Background](#background)
+2.1 [Layers](#layers)
+2.2 ["Wrapper" Repository](#wrapper)
+3. [Build with Yocto](#building)
+3.1 [System Requirements](#SystemRequirements)
+3.2 [Setting up the Yocto build environment](#Setting)
+3.3 [Adding or removing layers](#addorremove)
+3.4 [Building an Image](#build)
+3.5 [Flashing an Image](#flash)
+3.6 [Building a firmware update image with rauc framework](#rauc-update)
+4. [Appendix](#appendix)
+A.1 [How to change kernel configurations](#kernel)
 
 
 ## Introduction <a name="introduction"></a>
@@ -102,28 +102,44 @@ Some packages are required by the build host to be able to cover all build scena
 
 To be able to build an image with Yocto, the following setup should be followed:
 
-1. To make use of the manifest file, you have to install `repo` to get your Yocto environment ready. The `repo` utility was originally created to ease Android development. It makes it easy to reference several Git repositories within a top-level project, which you can then clone to your local machine all at once.
+1. To make use of the manifest file, you have to install `repo` to get your Yocto build environment ready.
+   The `repo` utility was originally created to ease Android development. It makes it easy to reference several
+   Git repositories within a top-level project, which you can then clone to your local machine all at once.
 
-```bash
-mkdir ~/bin
-curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
-chmod a+x ~/bin/repo
-```
+   In recent Linux distributions, the tool is available a pre-packaged version which can be installed via
+   the package management tool. For Debian/Ubuntu, the command would be for example `sudo apt install repo`.
+   Usually, the pre-packaged versions of `repo` are slightly outdated and thus may print a warning message
+   on usage, but the version is recent enough to complete the task here.
 
-You need to also make sure that `~/bin` is added to your `PATH` variable (usually the directory is added automatically in Ubuntu).
+   An alternative approach is to pull the latest tool directly from its repository:
 
-```bash
-echo 'export PATH="$PATH":~/bin' >> ~/.bashrc
-```
+   ```bash
+   mkdir ~/bin
+   curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+   chmod a+x ~/bin/repo
+   ```
+
+   If you cannot access this original server, e.g. due to firewall restrictions, you can try to use a mirror,
+   e.g. `https://raw.githubusercontent.com/GerritCodeReview/git-repo/refs/heads/main/repo`.
+
+   If you downloaded the tool manually, then you also need to make sure that `~/bin` is added
+   to your `PATH` variable (usually the directory is added automatically in Ubuntu).
+
+   ```bash
+   export PATH="$PATH":~/bin
+   echo 'export PATH="$PATH":~/bin' >> ~/.bashrc
+   ```
+
+   The second line ensures that this is a persistant setting after you log off from or restart your system.
 
 2. Now you can use the `repo` tool to check out all the repositories listed in the manifest file.
 
-```bash
-mkdir yocto
-cd yocto
-repo init -u https://github.com/chargebyte/chargebyte-bsp -b kirkstone-everest
-repo sync
-```
+   ```bash
+   mkdir yocto
+   cd yocto
+   repo init -u https://github.com/chargebyte/chargebyte-bsp -b kirkstone-everest
+   repo sync
+   ```
 
 After the command `repo sync` is executed, you should be able to find three folders in the created `yocto` directory:
 1. `source`: Where all the repositories representing the layers are cloned.
@@ -160,17 +176,23 @@ To correctly set configurations related to the hardware platform Tarragon or Cha
 | `chargesom`   | `dc-evb`         | `everest`     | `""`            | Basic BSP image for Charge SOM with DC EVB carrier board               |
 | `chargesom`   | `dc-evb`         | `everest`     | `developer`[^1] | BSP image for Charge SOM with DC EVB and additional developer packages |
 
-For building an image, here in the example for Tarragon, you would need to do the following:
+For building an image, you would need to do the following:
+
 1. Set the configurations for your build as mentioned in the table above. You can either:
-  - Execute the following commands to e.g., set the machine to `tarragon` and project to `bsp`:
-```bash
-export MACHINE=tarragon
-export SUBMACHINE=""
-export PROJECT=everest
-export BB_ENV_PASSTHROUGH_ADDITIONS="PROJECT MACHINE SUBMACHINE"
-```
-  - Edit `yocto/build/conf/local.conf` directly. e.g., `MACHINE=...`, `SUBMACHINE=...`.
-2. Execute `source yocto/source/oe-init-build-env build` which initializes the build environment and changes the directory to `yocto/build`.
+
+   - execute the following commands to e.g., set the machine to `tarragon` and project to `bsp`:
+
+     ```bash
+     export MACHINE=tarragon
+     export SUBMACHINE=""
+     export PROJECT=bsp
+     export BB_ENV_PASSTHROUGH_ADDITIONS="PROJECT MACHINE SUBMACHINE"
+     ```
+
+   - or edit `yocto/build/conf/local.conf` directly. e.g., `MACHINE=...`.
+
+2. Execute `cd yocto; source source/oe-init-build-env build` which initializes the build environment and changes the directory to `yocto/build`.
+
 3. Execute `bitbake core-image-minimal` to build the image.
 
 The resulting image will be found in `yocto/build/tmp/deploy/image/<machine>`, having a filename similar to `core-image-minimal-platform-1234567890-rootfs.ext4.gz`
@@ -214,7 +236,7 @@ Output:
 === System Info ===
 Compatible: I2SE Tarragon
 Variant:
-Booted from: rootfs.1 (B) 
+Booted from: rootfs.1 (B)
 
 === Bootloader ===
 Activated: rootfs.1 (B)
@@ -222,8 +244,8 @@ Activated: rootfs.1 (B)
 === Slot States ===
 x [rootfs.1] (/dev/mmcblk0p1, ext4, booted)
 	 bootname: B
-	 mounted: / 
-	 boot status: good 
+	 mounted: /
+	 boot status: good
   [customerfs.1] (/dev/mmcblk0p6, ext4, active) mounted: /var/log
 o [rootfs.0] (/dev/mmcblk0p2, ext4, inactive)
 	 bootname: A
@@ -241,11 +263,11 @@ mount /dev/mmcblk0p2 /mnt
 mv /mnt/sbin/init.orig /mnt/sbin/init
 umount /dev/mmcblk0p2
 ```
-5. Mark the other partition as active with RAUC through the following command. 
+5. Mark the other partition as active with RAUC through the following command.
 ```bash
 rauc status mark-active other
 ```
-6. Reboot 
+6. Reboot
 
 ### Building a firmware update image with rauc framework  <a name="rauc-update"></a>
 
@@ -253,9 +275,9 @@ The chargebyte's meta-chargebyte-everest layer is prepared for building a firmwa
 
 If you don't want to fine-tune the update image further, the only remaining steps are:
 1. Create a firmware signing key if not already done. For this, we kindly refer to the good [rauc manual](https://rauc.readthedocs.io/).
-2. Provide the key and certificate location to the Yocto build environment. This can be done in different ways, e.g.,  
+2. Provide the key and certificate location to the Yocto build environment. This can be done in different ways, e.g.,
   - extend your `yocto/build/conf/local.conf`, or
-  - use a `core-bundle.bbappend` file to extend the existing Bitbake recipe.  
+  - use a `core-bundle.bbappend` file to extend the existing Bitbake recipe.
   In either variant, the file content must look like:
 ```
 RAUC_KEY_FILE  = "/path/to/your/signing.key"
