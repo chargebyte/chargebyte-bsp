@@ -93,28 +93,44 @@ Some packages are required by the build host to be able to cover all build scena
 
 To be able to build an image with Yocto, the following setup should be followed:
 
-1. To make use of the manifest file, you have to install `repo` to get your Yocto environment ready. The `repo` utility was originally created to ease Android development. It makes it easy to reference several Git repositories within a top-level project, which you can then clone to your local machine all at once.
+1. To make use of the manifest file, you have to install `repo` to get your Yocto build environment ready.
+   The `repo` utility was originally created to ease Android development. It makes it easy to reference several
+   Git repositories within a top-level project, which you can then clone to your local machine all at once.
 
-```bash
-mkdir ~/bin
-curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
-chmod a+x ~/bin/repo
-```
+   In recent Linux distributions, the tool is available a pre-packaged version which can be installed via
+   the package management tool. For Debian/Ubuntu, the command would be for example `sudo apt install repo`.
+   Usually, the pre-packaged versions of `repo` are slightly outdated and thus may print a warning message
+   on usage, but the version is recent enough to complete the task here.
 
-You need to also make sure that `~/bin` is added to your `PATH` variable (Usually the directory is added automatically in Ubuntu).
+   An alternative approach is to pull the latest tool directly from its repository:
 
-```bash
-echo 'export PATH="$PATH":~/bin' >> ~/.bashrc
-```
+   ```bash
+   mkdir ~/bin
+   curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+   chmod a+x ~/bin/repo
+   ```
+
+   If you cannot access this original server, e.g. due to firewall restrictions, you can try to use a mirror,
+   e.g. `https://raw.githubusercontent.com/GerritCodeReview/git-repo/refs/heads/main/repo`.
+
+   If you downloaded the tool manually, then you also need to make sure that `~/bin` is added
+   to your `PATH` variable (usually the directory is added automatically in Ubuntu).
+
+   ```bash
+   export PATH="$PATH":~/bin
+   echo 'export PATH="$PATH":~/bin' >> ~/.bashrc
+   ```
+
+   The second line ensures that this is a persistant setting after you log off from or restart your system.
 
 2. Now you can use the `repo` tool to check out all the repositories listed in the manifest file.
 
-```bash
-mkdir yocto
-cd yocto
-repo init -u https://github.com/chargebyte/chargebyte-bsp -b kirkstone
-repo sync
-```
+   ```bash
+   mkdir yocto
+   cd yocto
+   repo init -u https://github.com/chargebyte/chargebyte-bsp -b kirkstone
+   repo sync
+   ```
 
 After the command `repo sync` is executed, you should be able to find three folders in the created `yocto` directory:
 1. `source`: Where all the repositories representing the layers are cloned.
@@ -154,16 +170,22 @@ To correctly set configurations related to the hardware platforms Tarragon and E
 | `chargesom`   | `dc-evb`         | `bsp`         | `developer`[^1] | BSP image for Charge SOM with DC EVB and additional developer packages |
 
 For building an image, you would need to do the following:
+
 1. Set the configurations for your build as mentioned in the table above. You can either:
-  - Execute the following commands to e.g., set the machine to `tarragon` and project to `bsp`:
-```bash
-export MACHINE=tarragon
-export SUBMACHINE=""
-export PROJECT=bsp
-export BB_ENV_PASSTHROUGH_ADDITIONS="PROJECT MACHINE SUBMACHINE"
-```
-  - Edit `yocto/build/conf/local.conf` directly. e.g., `MACHINE=...`.
-2. Execute `source yocto/source/oe-init-build-env build` which initializes the build environment and changes the directory to `yocto/build`.
+
+   - execute the following commands to e.g., set the machine to `tarragon` and project to `bsp`:
+
+     ```bash
+     export MACHINE=tarragon
+     export SUBMACHINE=""
+     export PROJECT=bsp
+     export BB_ENV_PASSTHROUGH_ADDITIONS="PROJECT MACHINE SUBMACHINE"
+     ```
+
+   - or edit `yocto/build/conf/local.conf` directly. e.g., `MACHINE=...`.
+
+2. Execute `cd yocto; source source/oe-init-build-env build` which initializes the build environment and changes the directory to `yocto/build`.
+
 3. Execute `bitbake core-image-minimal` to build the image.
 
 The resulting image will be found in `yocto/build/tmp/deploy/image/<machine>`, having a filename similar to `core-image-minimal-platform-1234567890-rootfs.ext4.gz`
