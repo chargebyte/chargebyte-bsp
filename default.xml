@@ -22,7 +22,7 @@
   <project remote="rauc"         revision="2eb0d2af94c63f4bc5b52e5f7c5a36000bfd7016" name="meta-rauc"                path="source/meta-rauc"/>
   <project remote="qt5"          revision="kirkstone"                                name="meta-qt5"                 path="source/meta-qt5"/>
   <project remote="nymea"        revision="kirkstone"                                name="meta-nymea"               path="source/meta-nymea"/>
-  <project remote="everest"      revision="9de61f5d7e8056b1f053dd332e87573f627e6c09" name="meta-everest"             path="source/meta-everest"/>
+  <project remote="everest"      revision="d383468fe9773e272a7f075d96f2c51124ecf72e" name="meta-everest"             path="source/meta-everest"/>
   <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte-everest"  path="source/meta-chargebyte-everest"/>
   <project remote="chargebyte"   revision="kirkstone-everest"                        name="chargebyte-bsp"           path="chargebyte-bsp">
     <linkfile dest="build/conf" src="conf"/>
