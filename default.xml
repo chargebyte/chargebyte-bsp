@@ -3,13 +3,14 @@
   <default sync-j="4" revision="kirkstone"/>
 
   <!-- remote repository definitions -->
-  <remote fetch="https://git.yoctoproject.org" name="yocto"/>
-  <remote fetch="https://github.com/openembedded" name="oe"/>
-  <remote fetch="https://github.com/chargebyte" name="chargebyte"/>
-  <remote fetch="https://github.com/rauc" name="rauc"/>
-  <remote fetch="https://github.com/meta-qt5" name="qt5"/>
-  <remote fetch="https://github.com/nymea" name="nymea"/>
-  <remote fetch="https://github.com/EVerest" name="everest"/>
+  <remote fetch="https://git.yoctoproject.org" name="yocto" alias="origin"/>
+  <remote fetch="https://github.com/openembedded" name="oe" alias="origin"/>
+  <remote fetch="https://github.com/chargebyte" name="chargebyte" alias="origin"/>
+  <remote fetch="https://github.com/rauc" name="rauc" alias="origin"/>
+  <remote fetch="https://github.com/meta-qt5" name="qt5" alias="origin"/>
+  <remote fetch="https://github.com/nymea" name="nymea" alias="origin"/>
+  <remote fetch="https://github.com/EVerest" name="everest" alias="origin"/>
+
 
   <!-- project definitions -->
   <project remote="yocto"        revision="kirkstone"                                name="poky"                     path="source"/>
@@ -22,7 +23,7 @@
   <project remote="rauc"         revision="2eb0d2af94c63f4bc5b52e5f7c5a36000bfd7016" name="meta-rauc"                path="source/meta-rauc"/>
   <project remote="qt5"          revision="kirkstone"                                name="meta-qt5"                 path="source/meta-qt5"/>
   <project remote="nymea"        revision="kirkstone"                                name="meta-nymea"               path="source/meta-nymea"/>
-  <project remote="everest"      revision="d383468fe9773e272a7f075d96f2c51124ecf72e" name="meta-everest"             path="source/meta-everest"/>
+  <project remote="everest"      revision="e73603078e92b6c0a66e6de6423f309e7c0ce03a" name="meta-everest"             path="source/meta-everest"/>
   <project remote="chargebyte"   revision="kirkstone"                                name="meta-chargebyte-everest"  path="source/meta-chargebyte-everest"/>
   <project remote="chargebyte"   revision="kirkstone-everest"                        name="chargebyte-bsp"           path="chargebyte-bsp">
     <linkfile dest="build/conf" src="conf"/>
