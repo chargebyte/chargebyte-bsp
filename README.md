@@ -96,7 +96,7 @@ Apart from the manifest file, the repository also has a configuration folder. Th
 
 ### System Requirements <a name="SystemRequirements"></a>
 
-Some packages are required by the build host to be able to cover all build scenarios using the Yocto Project. In this section of the [Yocto Reference Manual](https://docs.yoctoproject.org/ref-manual/system-requirements.html#required-packages-for-the-build-host) you can find some helpful instructions based on the Linux distribution you are using. If you are using a host other than Linux, this section of the [Yocto Project Development Tasks Manual](https://docs.yoctoproject.org/dev-manual/start.html#preparing-the-build-host) can help you setting up your host system for using Yocto. Some other prerequisites might be needed to build EVerest. These can be found in the [everest-core](https://github.com/EVerest/everest-core#readme) repository.
+Some packages are required by the build host to be able to cover all build scenarios using the Yocto Project. In this section of the [Yocto Reference Manual](https://docs.yoctoproject.org/ref-manual/system-requirements.html#required-packages-for-the-build-host) you can find some helpful instructions based on the Linux distribution you are using. If you are using a host other than Linux, this section of the [Yocto Project Development Tasks Manual](https://docs.yoctoproject.org/dev-manual/start.html#preparing-the-build-host) can help you setting up your host system for using Yocto. Some other prerequisites might be needed to build EVerest. These can be found in the [everest-core](https://github.com/EVerest/EVerest#readme) repository.
 
 ### Setting up the Yocto build environment <a name="Setting"></a>
 
