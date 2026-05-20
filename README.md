@@ -6,19 +6,19 @@ For problems and inquiries: https://chargebyte.com/support
 
 ## Table of Contents
 
-1. [Introduction](#introduction)
-2. [Background](#background)
-2.1 [Layers](#layers)
-2.2 ["Wrapper" Repository](#wrapper)
-3. [Build with Yocto](#building)
-3.1 [System Requirements](#SystemRequirements)
-3.2 [Setting up the Yocto build environment](#Setting)
-3.3 [Adding or removing layers](#addorremove)
-3.4 [Building an Image](#build)
-3.5 [Flashing an Image](#flash)
-3.6 [Building a firmware update image with rauc framework](#rauc-update)
-4. [Appendix](#appendix)
-A.1 [How to change kernel configurations](#kernel)
+1. [Introduction](#introduction)  
+2. [Background](#background)  
+2.1 [Layers](#layers)  
+2.2 ["Wrapper" Repository](#wrapper)  
+3. [Build with Yocto](#building)  
+3.1 [System Requirements](#SystemRequirements)  
+3.2 [Setting up the Yocto build environment](#Setting)  
+3.3 [Adding or removing layers](#addorremove)  
+3.4 [Building an Image](#build)  
+3.5 [Flashing an Image](#flash)  
+3.6 [Building a firmware update image with rauc framework](#rauc-update)  
+4. [Appendix](#appendix)  
+A.1 [How to change kernel configurations](#kernel)  
 
 
 ## Introduction <a name="introduction"></a>
